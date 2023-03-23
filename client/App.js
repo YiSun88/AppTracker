@@ -1,23 +1,16 @@
-import React, { createContext, useContext, useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Borders from './components/Borders';
 import Dashboard from './components/Dashboard';
 import Applications from './components/Applications';
-
-const TestContext = createContext('Default!');
-
-export function useTestContext() {
-  return useContext(TestContext);
-}
+import { AppsProvider } from './components/appsFeature/AppsContext';
 
 function App() {
-  const [testText, setTestText] = useState('test text');
-
   return (
     <div className="App">
       <BrowserRouter>
-        <TestContext.Provider value={{ testText, setTestText }}>
+        <AppsProvider>
           <Borders>
             <Routes>
               {/* Dashboard */}
@@ -27,7 +20,7 @@ function App() {
               <Route path="/applications" element={<Applications />} />
             </Routes>
           </Borders>
-        </TestContext.Provider>
+        </AppsProvider>
       </BrowserRouter>
     </div>
   );

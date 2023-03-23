@@ -6,12 +6,13 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Button, Grid, Paper } from '@mui/material';
+import { Grid, Paper, styled, useTheme } from '@mui/material';
 import Title from './Title';
 
-import { useTestContext } from '../App';
+import { useApps } from './appsFeature/AppsContext';
 
 // Generate Order Data
+/*
 function createData(id, date, name, shipTo, paymentMethod, amount) {
   return {
     id,
@@ -65,80 +66,68 @@ const rows = [
     212.79,
   ),
 ];
+*/
+
+/*
+ *  Using tenary to show loading or fetched data:
+ */
+
+/*
+return (
+  <div>
+    {data ? (
+      <ul>
+        {data.map(item => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
+    ) : (
+      <p>Loading data...</p>
+    )}
+  </div>
+);
+*/
+
+const TableHeadCell = styled(TableCell)(({ theme }) => ({
+  fontSize: '1.1rem',
+  color: theme.palette.primary.main,
+}));
 
 export default function Applications() {
-  /*
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(
-        'https://ohwuvawrw4.execute-api.us-west-2.amazonaws.com/messages'
-      );
-      const data = await response.json();
-      console.log(data[0]);
-    }
-    fetchData();
-  }, []);
-  */
-
-  /*
-   *  Using tenary to show loading or fetched data:
-   */
-
-  /*
-  return (
-    <div>
-      {data ? (
-        <ul>
-          {data.map(item => (
-            <li key={item.id}>{item.name}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>Loading data...</p>
-      )}
-    </div>
-  );
-  */
-  const { testText, setTestText } = useTestContext();
-
   const preventDefault = useCallback((event) => {
     event.preventDefault();
-
-    setTestText('Second Test!');
-
-    fetch('/apps', { method: 'GET' })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch(() => {
-        console.log(
-          'Error encountered when trying to fetch all applications from backend.',
-        );
-      });
   }, []);
+
+  const theme = useTheme();
+  const apps = useApps();
+  console.log(theme);
 
   return (
     <Grid container>
       <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
           <Title>Applications</Title>
-          <Table size="small">
+          <Table size="medium" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Ship To</TableCell>
-                <TableCell>Payment Method</TableCell>
-                <TableCell align="right">Sale Amount</TableCell>
+                <TableHeadCell theme={theme}>Company</TableHeadCell>
+                <TableHeadCell theme={theme}>Position</TableHeadCell>
+                <TableHeadCell theme={theme}>Location</TableHeadCell>
+                <TableHeadCell theme={theme}>Status</TableHeadCell>
+                <TableHeadCell align="center" theme={theme}>
+                  Note
+                </TableHeadCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.date}</TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.shipTo}</TableCell>
-                  <TableCell>{row.paymentMethod}</TableCell>
-                  <TableCell align="right">{`$${row.amount}`}</TableCell>
+              {apps.map((app) => (
+                // eslint-disable-next-line no-underscore-dangle
+                <TableRow key={app._id}>
+                  <TableCell>{app.company}</TableCell>
+                  <TableCell>{app.position}</TableCell>
+                  <TableCell>{app.location}</TableCell>
+                  <TableCell>{app.status}</TableCell>
+                  <TableCell align="center">{app.note}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -151,7 +140,6 @@ export default function Applications() {
           >
             See more orders
           </Link>
-          <Button>{testText}</Button>
         </Paper>
       </Grid>
     </Grid>

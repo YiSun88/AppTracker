@@ -1,0 +1,31 @@
+module.exports = {
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: ['plugin:react/recommended', 'airbnb'],
+  overrides: [],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
+  plugins: ['react'],
+  rules: {
+    'arrow-parens': 'off',
+    'consistent-return': 'off',
+    'func-names': 'off',
+    'no-console': 'off',
+    radix: 'off',
+    'react/button-has-type': 'off',
+    'react/destructuring-assignment': 'off',
+    'react/jsx-filename-extension': 'off',
+    'react/prop-types': 'off',
+    'react/jsx-no-constructed-context-values': 'warn',
+    'import/no-cycle': 'warn',
+    'jsx-a11y/anchor-is-valid': 'warn',
+    'implicit-arrow-linebreak': 'off',
+    'function-paren-newline': 'off',
+    'object-curly-newline': 'off',
+    'no-underscore-dangle': 'off',
+  },
+};

@@ -22,7 +22,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
-import { teal } from '@mui/material/colors';
+import { indigo } from '@mui/material/colors';
 import { mainListItems, secondaryListItems } from './listItems';
 
 function Copyright(props) {
@@ -94,10 +94,10 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme({
   palette: {
     mode: 'dark',
-    primary: teal,
-    // primary: {
-    //   main: '#b2dfdb',
-    // },
+    // primary: blueGrey,
+    primary: {
+      main: indigo[200],
+    },
   },
 });
 

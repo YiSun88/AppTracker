@@ -46,6 +46,11 @@ module.exports = {
     // contentBase: path.join(__dirname, 'dist'),
     port: 8080,
     open: true,
+    /*
+     * The previous history page will be served in place of any 404 responses.
+     * To allow working with nodemon backend server.
+     */
+    historyApiFallback: true,
     proxy: {
       '/apps': 'http://localhost:3000',
     },
