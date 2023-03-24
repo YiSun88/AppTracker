@@ -15,9 +15,21 @@ export default function AddApplicationForm() {
 
   const submit = async () => {
     try {
-      const res = await fetch('/apps/add', { method: 'POST' });
+      console.log(company, position);
+      const res = await fetch('/apps/add', {
+        method: 'POST',
+        body: JSON.stringify({ company, position, location, dateSubmitted }),
+        /*
+         * Always set the content-type header to let server recognize and parse JSON!
+         */
+        headers: {
+          'Content-type': 'application/json',
+        },
+      });
       if (!res.ok) {
         const data = await res.json();
+      } else {
+        // dispatch (need to get the _id of added application)
       }
     } catch {
       console.log();

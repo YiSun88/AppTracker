@@ -18,9 +18,14 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/add', (req, res, next) => {
-  const { company, position, location } = req.body;
+  const { company, position, location, dateSubmitted } = req.body;
 
-  const newApp = new Application({ company, position, location });
+  const newApp = new Application({
+    company,
+    position,
+    location,
+    dateSubmitted,
+  });
   newApp
     .save()
     .then(() => res.status(200).send('Application added!'))
