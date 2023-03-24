@@ -7,17 +7,21 @@ const AppsDispatchContext = createContext(null);
 export function AppsProvider({ children }) {
   const [apps, dispatch] = useReducer(appsReducer, []);
 
+  /*
+   * useState hook here for loading status is not working, since setStatus may
+   * be processed by React by batches and not right away.
+   */
+  // const [status, setStatus] = useState('idle');
+
   useEffect(() => {
     fetch('/apps', { method: 'GET' })
       .then((res) => res.json())
-      .then((data) =>
-        data.forEach((application) => {
-          dispatch({
-            type: 'add',
-            payload: application,
-          });
-        }),
-      )
+      .then((data) => {
+        dispatch({
+          type: 'initialize',
+          payload: data,
+        });
+      })
       .catch(() => {
         console.log(
           'Error encountered when trying to fetch all applications from backend.',
@@ -44,12 +48,18 @@ export function useAppsDispatch() {
 
 function appsReducer(apps, action) {
   switch (action.type) {
+    case 'initialize': {
+      return [...action.payload];
+    }
     case 'add': {
       if (apps.findIndex((app) => app._id === action.payload._id) === -1) {
         return [...apps, action.payload];
       }
       return apps;
     }
+    /*
+     * Add an initialize action type?
+     */
     default: {
       return apps;
     }

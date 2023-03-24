@@ -24,13 +24,13 @@ export const mainListItems = (
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
-      <ListItemText primary="Applications" />
+      <ListItemText primary="All Applications" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component={Link} to="/applications/add">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Customers" />
+      <ListItemText primary="New Application" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>

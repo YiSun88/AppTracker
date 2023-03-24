@@ -27,5 +27,6 @@ module.exports = {
     'function-paren-newline': 'off',
     'object-curly-newline': 'off',
     'no-underscore-dangle': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 };

@@ -29,6 +29,9 @@ const applicationSchema = new Schema({
   location: {
     type: String,
   },
+  dateSubmitted: {
+    type: Date,
+  },
   status: {
     type: String,
   },
