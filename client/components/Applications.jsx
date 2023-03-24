@@ -7,8 +7,9 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Grid, Paper, styled, useTheme } from '@mui/material';
-import Title from './Title.jsx';
+import { format } from 'date-fns';
 
+import Title from './Title.jsx';
 import { useApps } from './appsFeature/AppsContext.jsx';
 
 /*
@@ -56,6 +57,7 @@ export default function Applications() {
                 <TableHeadCell theme={theme}>Position</TableHeadCell>
                 <TableHeadCell theme={theme}>Location</TableHeadCell>
                 <TableHeadCell theme={theme}>Status</TableHeadCell>
+                <TableHeadCell theme={theme}>Date Submitted</TableHeadCell>
                 <TableHeadCell align="center" theme={theme}>
                   Note
                 </TableHeadCell>
@@ -69,6 +71,11 @@ export default function Applications() {
                   <TableCell>{app.position}</TableCell>
                   <TableCell>{app.location}</TableCell>
                   <TableCell>{app.status}</TableCell>
+                  <TableCell>
+                    {app.dateSubmitted
+                      ? format(new Date(app.dateSubmitted), 'MM/dd/yyyy')
+                      : ''}
+                  </TableCell>
                   <TableCell align="center">{app.note}</TableCell>
                 </TableRow>
               ))}

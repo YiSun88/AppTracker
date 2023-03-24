@@ -15,6 +15,7 @@
     "react/prop-types": "off",
     "jsx-a11y/anchor-is-valid": "warn",
     "no-underscore-dangle": "off",
-    "import/extensions": ["warn", "always", { "js": "never" }]
+    "import/extensions": ["warn", "always", { "js": "never" }],
+    "no-unused-vars": "warn"
   }
 }

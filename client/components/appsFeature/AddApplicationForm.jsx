@@ -1,7 +1,14 @@
-/* eslint-disable no-unused-vars */
-import { Stack, Paper, TextField, Button, Box } from '@mui/material';
+/* eslint-disable react/jsx-props-no-spreading */
+import { Stack, Paper, TextField, Button, Box, Snackbar } from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
 import React, { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
+
+import { useAppsDispatch } from './AppsContext.jsx';
+
+const Alert = React.forwardRef((props, ref) => (
+  <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+));
 
 export default function AddApplicationForm() {
   const [company, setCompany] = useState('');
@@ -12,6 +19,19 @@ export default function AddApplicationForm() {
   const onCompanyChange = (e) => setCompany(e.target.value);
   const onPositionChange = (e) => setPosition(e.target.value);
   const onLocationChange = (e) => setLocation(e.target.value);
+
+  const dispatch = useAppsDispatch();
+
+  const [alert, setAlert] = useState({
+    isOpen: false,
+    severity: 'success',
+    message: '',
+  });
+
+  const closeAlert = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setAlert({ ...alert, isOpen: false });
+  };
 
   const submit = async () => {
     try {
@@ -32,8 +52,26 @@ export default function AddApplicationForm() {
       });
       if (!res.ok) {
         const data = await res.json();
+        setAlert({
+          isOpen: true,
+          severity: 'error',
+          message: 'Error. Please fill all required fields',
+        });
       } else {
+        setAlert({
+          isOpen: true,
+          severity: 'success',
+          message: 'Application added successfully',
+        });
         // dispatch (need to get the _id of added application)
+        dispatch({
+          type: 'add',
+          payload: { company, position, location, dateSubmitted },
+        });
+
+        setCompany('');
+        setPosition('');
+        setLocation('');
       }
     } catch {
       console.log();
@@ -45,21 +83,21 @@ export default function AddApplicationForm() {
       <Stack spacing={2}>
         <TextField
           id="outlined-basic"
-          label="Company"
+          label="Company (required)"
           value={company}
           variant="outlined"
           onChange={onCompanyChange}
         />
         <TextField
           id="outlined-basic"
-          label="Job Position"
+          label="Job Position (required)"
           value={position}
           variant="outlined"
           onChange={onPositionChange}
         />
         <TextField
           id="outlined-basic"
-          label="Location"
+          label="Location (required)"
           value={location}
           variant="outlined"
           onChange={onLocationChange}
@@ -80,6 +118,20 @@ export default function AddApplicationForm() {
           </Button>
         </Box>
       </Stack>
+      <Snackbar
+        open={alert.isOpen}
+        autoHideDuration={5000}
+        onClose={closeAlert}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={closeAlert}
+          severity={alert.severity}
+          sx={{ width: '100%' }}
+        >
+          {alert.message}
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 }
