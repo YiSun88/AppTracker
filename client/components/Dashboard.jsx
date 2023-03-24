@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Paper } from '@mui/material';
-import { Chart, StatusChart } from './Chart';
-import Deposits from './Deposits';
+import { Chart, StatusChart } from './Chart.jsx';
+import Deposits from './Deposits.jsx';
 
 export default function Dashboard() {
   return (

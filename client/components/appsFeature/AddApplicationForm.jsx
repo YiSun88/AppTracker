@@ -15,10 +15,14 @@ export default function AddApplicationForm() {
 
   const submit = async () => {
     try {
-      console.log(company, position);
       const res = await fetch('/apps/add', {
         method: 'POST',
-        body: JSON.stringify({ company, position, location, dateSubmitted }),
+        body: JSON.stringify({
+          company,
+          position,
+          location,
+          dateSubmitted,
+        }),
         /*
          * Always set the content-type header to let server recognize and parse JSON!
          */

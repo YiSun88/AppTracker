@@ -12,7 +12,7 @@ import {
   Bar,
   CartesianGrid,
 } from 'recharts';
-import Title from './Title';
+import Title from './Title.jsx';
 
 // Generate Sales Data
 function createData(time, amount) {

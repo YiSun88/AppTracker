@@ -7,9 +7,9 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Grid, Paper, styled, useTheme } from '@mui/material';
-import Title from './Title';
+import Title from './Title.jsx';
 
-import { useApps } from './appsFeature/AppsContext';
+import { useApps } from './appsFeature/AppsContext.jsx';
 
 /*
  *  Using tenary to show loading or fetched data:
@@ -42,7 +42,7 @@ export default function Applications() {
   }, []);
 
   const theme = useTheme();
-  const apps = useApps();
+  const apps = useApps().slice(0).reverse();
 
   return (
     <Grid container>
@@ -80,7 +80,7 @@ export default function Applications() {
             onClick={preventDefault}
             sx={{ mt: 3 }}
           >
-            See more orders
+            See more applications
           </Link>
         </Paper>
       </Grid>
