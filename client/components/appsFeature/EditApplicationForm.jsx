@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { Stack, Paper, TextField, Button, Box, Snackbar } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { useAppsDispatch, useApps } from './AppsContext.jsx';
+import { useAppsDispatch } from './AppsContext.jsx';
 
 const Alert = React.forwardRef((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -13,14 +13,34 @@ const Alert = React.forwardRef((props, ref) => (
 
 export default function EditApplicationForm() {
   const { id } = useParams();
-  const thisApp = { ...useApps().find((app) => app._id === id) };
 
-  const [company, setCompany] = useState(thisApp.company);
-  const [position, setPosition] = useState(thisApp.position);
-  const [location, setLocation] = useState(thisApp.location);
-  const [dateSubmitted, setDateSubmitted] = useState(
-    new Date(thisApp.dateSubmitted)
-  );
+  const [company, setCompany] = useState('');
+  const [position, setPosition] = useState('');
+  const [location, setLocation] = useState('');
+  const [dateSubmitted, setDateSubmitted] = useState(new Date());
+
+  const navigate = useNavigate();
+
+  /*
+   Always fetch data from backend on mounting/useEffect hook, to ensure get data from the single source of truth. In addition, this help to ensue proper rendering after refresh. (parent contextProvider will be remounted on refresh as well, fetch there is async so the context will not be available immediately for the useEffect hook.)
+   */
+
+  useEffect(() => {
+    const fetchAnApp = async () => {
+      try {
+        const app = await (
+          await fetch(`/apps/${id}`, { method: 'GET' })
+        ).json();
+        setCompany(app.company);
+        setPosition(app.position);
+        setLocation(app.location);
+        setDateSubmitted(new Date(app.dateSubmitted));
+      } catch (err) {
+        console.log('Error when fetching this application from Backend.');
+      }
+    };
+    fetchAnApp();
+  }, []);
 
   const onCompanyChange = (e) => setCompany(e.target.value);
   const onPositionChange = (e) => setPosition(e.target.value);
@@ -39,7 +59,7 @@ export default function EditApplicationForm() {
     setAlert({ ...alert, isOpen: false });
   };
 
-  const edit = async () => {
+  const editApp = async () => {
     try {
       const res = await fetch(`/apps/edit/${id}`, {
         method: 'PUT',
@@ -88,6 +108,37 @@ export default function EditApplicationForm() {
     }
   };
 
+  const deleteApp = async () => {
+    try {
+      const res = await fetch(`/apps/delete/${id}`, {
+        method: 'DELETE',
+      });
+      const deletedId = await res.json();
+
+      if (!res.ok) {
+        setAlert({
+          isOpen: true,
+          severity: 'error',
+          message: `${deletedId.err}`,
+        });
+      } else {
+        // dispatch (need to get the _id of added application), therefore add what is returned from Backend, not simply the states in Frontend
+        dispatch({
+          type: 'delete',
+          payload: { _id: deletedId },
+        });
+
+        navigate('/');
+      }
+    } catch (err) {
+      setAlert({
+        isOpen: true,
+        severity: 'error',
+        message: `${err}`,
+      });
+    }
+  };
+
   return (
     <Paper sx={{ p: 2, pl: 6, display: 'flex', flexDirection: 'column' }}>
       <Stack spacing={2}>
@@ -117,16 +168,28 @@ export default function EditApplicationForm() {
           value={dateSubmitted}
           onChange={(newValue) => setDateSubmitted(newValue)}
         />
-        <Box textAlign="center">
-          <Button
-            onClick={edit}
-            variant="contained"
-            color="success"
-            sx={{ width: '30%' }}
-          >
-            Edit
-          </Button>
-        </Box>
+        <Stack direction="row" justifyContent="flex-end">
+          <Box textAlign="center">
+            <Button
+              onClick={editApp}
+              variant="contained"
+              color="success"
+              sx={{ width: '30%' }}
+            >
+              Edit
+            </Button>
+          </Box>
+          <Box textAlign="center">
+            <Button
+              onClick={deleteApp}
+              variant="contained"
+              color="error"
+              sx={{ width: '10%' }}
+            >
+              Delete
+            </Button>
+          </Box>
+        </Stack>
       </Stack>
       <Snackbar
         open={alert.isOpen}

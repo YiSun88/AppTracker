@@ -76,6 +76,9 @@ function appsReducer(apps, action) {
         return app;
       });
     }
+    case 'delete': {
+      return apps.filter((app) => app._id !== action.payload._id);
+    }
     default: {
       return apps;
     }

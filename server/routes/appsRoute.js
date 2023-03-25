@@ -3,6 +3,7 @@
 const router = require('express').Router();
 const Application = require('../models/Applications.model');
 
+// Get all applications for the Frontend table
 router.get('/', (req, res, next) => {
   Application.find()
     .then((applications) => res.status(200).json(applications))
@@ -17,6 +18,7 @@ router.get('/', (req, res, next) => {
     );
 });
 
+// Add a new job application
 router.post('/add', (req, res, next) => {
   const { company, position, location, dateSubmitted } = req.body;
 
@@ -54,6 +56,7 @@ router.post('/add', (req, res, next) => {
   }
 });
 
+// Edit an existing job application
 router.put('/edit/:id', async (req, res, next) => {
   const { id } = req.params;
   const { company, position, location, dateSubmitted } = req.body;
@@ -72,10 +75,54 @@ router.put('/edit/:id', async (req, res, next) => {
     res.status(200).json(updatedApp);
   } catch (err) {
     next({
-      log: `Error encountered in application put "/edit" route, ${err}`,
+      log: `Error encountered in application put "/edit/:id" route, ${err}`,
       status: 500,
       message: {
         err: 'An error occurred when editing the application.',
+      },
+    });
+  }
+});
+
+// Get an existing application
+router.get('/:id', async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const foundApp = await Application.findById(id);
+    res.status(200).json(foundApp);
+  } catch (err) {
+    next({
+      log: `Error encountered in application get "/:id" route, ${err}`,
+      status: 500,
+      message: {
+        err: 'An error occurred when finding the application.',
+      },
+    });
+  }
+});
+
+// Delete an existing job application
+router.delete('/delete/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const deletedApp = await Application.findByIdAndDelete(id);
+    if (!deletedApp) {
+      return next({
+        log: `Error encountered in application delete "/delete/:id" route, document with the specific id was not found in database`,
+        status: 500,
+        message: {
+          err: 'An error occurred when deleting the application. Document with the specific id was not found in database',
+        },
+      });
+    }
+    return res.status(200).json(deletedApp._id);
+  } catch (err) {
+    return next({
+      log: `Error encountered in application delete "/delete/:id" route, ${err}`,
+      status: 500,
+      message: {
+        err: 'An error occurred when deleting the application.',
       },
     });
   }
