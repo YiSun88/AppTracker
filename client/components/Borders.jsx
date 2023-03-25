@@ -1,9 +1,4 @@
-/* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable no-confusing-arrow */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react/prop-types */
 import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -21,6 +16,8 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Switch from '@mui/material/Switch';
 
 import { indigo } from '@mui/material/colors';
 import { mainListItems, secondaryListItems } from './ListItems.jsx';
@@ -91,21 +88,27 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const mdTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    // primary: blueGrey,
-    primary: {
-      main: indigo[200],
-    },
-  },
-});
-
 export default function Borders({ children }) {
   const [open, setOpen] = React.useState(true);
+  const [dark, setDark] = React.useState(false);
+
+  const changeDarkMode = (event) => {
+    setDark(event.target.checked);
+  };
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const mdTheme = createTheme({
+    palette: {
+      mode: dark ? 'dark' : 'light',
+      // primary: blueGrey,
+      primary: {
+        main: indigo[300],
+      },
+    },
+  });
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -141,6 +144,12 @@ export default function Borders({ children }) {
             >
               Job Applications Tracker
             </Typography>
+            <Brightness4Icon />
+            <Switch
+              checked={dark}
+              onChange={changeDarkMode}
+              sx={{ marginRight: '12px' }}
+            />
             <IconButton color="inherit">
               <Badge badgeContent={0} color="secondary">
                 <NotificationsIcon />

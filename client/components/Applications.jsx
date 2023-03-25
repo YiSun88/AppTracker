@@ -1,13 +1,16 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useCallback, useEffect } from 'react';
-import Link from '@mui/material/Link';
+import MUILink from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Grid, Paper, styled, useTheme } from '@mui/material';
-import { format } from 'date-fns';
+import { Grid, Paper, styled, useTheme, Button } from '@mui/material';
+import { format, compareDesc } from 'date-fns';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { Link } from 'react-router-dom';
 
 import Title from './Title.jsx';
 import { useApps } from './appsFeature/AppsContext.jsx';
@@ -43,7 +46,11 @@ export default function Applications() {
   }, []);
 
   const theme = useTheme();
-  const apps = useApps().slice(0).reverse();
+  const apps = useApps()
+    .slice(0)
+    .sort((a, b) =>
+      compareDesc(new Date(a.dateSubmitted), new Date(b.dateSubmitted))
+    );
 
   return (
     <Grid container>
@@ -59,7 +66,7 @@ export default function Applications() {
                 <TableHeadCell theme={theme}>Status</TableHeadCell>
                 <TableHeadCell theme={theme}>Date Submitted</TableHeadCell>
                 <TableHeadCell align="center" theme={theme}>
-                  Note
+                  Actions
                 </TableHeadCell>
               </TableRow>
             </TableHead>
@@ -76,19 +83,36 @@ export default function Applications() {
                       ? format(new Date(app.dateSubmitted), 'MM/dd/yyyy')
                       : ''}
                   </TableCell>
-                  <TableCell align="center">{app.note}</TableCell>
+                  <TableCell align="center">
+                    <Button
+                      sx={{ minWidth: '24px', p: 0, m: 0 }}
+                      color="warning"
+                      component={Link}
+                      to={`/applications/edit/${app._id}`}
+                    >
+                      <ModeEditOutlineOutlinedIcon />
+                    </Button>
+                    <Button
+                      sx={{ minWidth: '24px', p: 0, m: 0 }}
+                      color="error"
+                      component={Link}
+                      to="/"
+                    >
+                      <DeleteForeverOutlinedIcon />
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-          <Link
+          <MUILink
             color="primary"
             href="#"
             onClick={preventDefault}
             sx={{ mt: 3 }}
           >
             See more applications
-          </Link>
+          </MUILink>
         </Paper>
       </Grid>
     </Grid>

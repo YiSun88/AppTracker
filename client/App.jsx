@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard.jsx';
 import Applications from './components/Applications.jsx';
 import { AppsProvider } from './components/appsFeature/AppsContext.jsx';
 import AddApplicationForm from './components/appsFeature/AddApplicationForm.jsx';
+import EditApplicationForm from './components/appsFeature/EditApplicationForm.jsx';
 
 function App() {
   return (
@@ -20,14 +21,20 @@ function App() {
                 {/* Dashboard */}
                 <Route path="/" element={<Dashboard />} />
 
+                {/* All Application Table */}
+                <Route path="/applications" element={<Applications />} />
+
                 {/* Add Application Form */}
                 <Route
                   path="/applications/add"
                   element={<AddApplicationForm />}
                 />
 
-                {/* Recent Orders */}
-                <Route path="/applications" element={<Applications />} />
+                {/* Edit an Application */}
+                <Route
+                  path="/applications/edit/:id"
+                  element={<EditApplicationForm />}
+                />
               </Routes>
             </Borders>
           </LocalizationProvider>

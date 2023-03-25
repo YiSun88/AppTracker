@@ -4,11 +4,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import SearchIcon from '@mui/icons-material/Search';
 
 import { Link } from 'react-router-dom';
 
@@ -22,15 +22,21 @@ export const mainListItems = (
     </ListItemButton>
     <ListItemButton component={Link} to="/applications">
       <ListItemIcon>
-        <ShoppingCartIcon />
+        <SummarizeIcon />
       </ListItemIcon>
       <ListItemText primary="All Applications" />
     </ListItemButton>
     <ListItemButton component={Link} to="/applications/add">
       <ListItemIcon>
-        <PeopleIcon />
+        <AddToPhotosIcon />
       </ListItemIcon>
       <ListItemText primary="New Application" />
+    </ListItemButton>
+    <ListItemButton>
+      <ListItemIcon>
+        <SearchIcon />
+      </ListItemIcon>
+      <ListItemText primary="Search Application" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
@@ -38,19 +44,13 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
-    </ListItemButton>
   </>
 );
 
 export const secondaryListItems = (
   <>
     <ListSubheader component="div" inset>
-      Saved reports
+      Summary
     </ListSubheader>
     <ListItemButton>
       <ListItemIcon>
@@ -68,7 +68,7 @@ export const secondaryListItems = (
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
+      <ListItemText primary="Year to date" />
     </ListItemButton>
   </>
 );

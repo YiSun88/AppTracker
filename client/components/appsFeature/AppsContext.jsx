@@ -14,19 +14,30 @@ export function AppsProvider({ children }) {
   // const [status, setStatus] = useState('idle');
 
   useEffect(() => {
-    fetch('/apps', { method: 'GET' })
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch({
-          type: 'initialize',
-          payload: data,
+    if (!apps.length) {
+      fetch('/apps', { method: 'GET' })
+        .then((res) => res.json())
+        .then((data) => {
+          /*
+           * Keep the dates in frontend context as string, to avoid large amount converting after the first fetch request. Instead, only do converting when certain dates are requried to be rendered.
+           */
+          // data.forEach((element) => {
+          //   if (element.dateSubmitted) {
+          //     // eslint-disable-next-line no-param-reassign
+          //     element.dateSubmitted = new Date(element.dateSubmitted);
+          //   }
+          // });
+          dispatch({
+            type: 'initialize',
+            payload: data,
+          });
+        })
+        .catch(() => {
+          console.log(
+            'Error encountered when trying to fetch all applications from backend.'
+          );
         });
-      })
-      .catch(() => {
-        console.log(
-          'Error encountered when trying to fetch all applications from backend.',
-        );
-      });
+    }
   }, []);
 
   return (
@@ -57,9 +68,14 @@ function appsReducer(apps, action) {
       }
       return apps;
     }
-    /*
-     * Add an initialize action type?
-     */
+    case 'edit': {
+      return apps.map((app) => {
+        if (app._id === action.payload._id) {
+          return action.payload;
+        }
+        return app;
+      });
+    }
     default: {
       return apps;
     }

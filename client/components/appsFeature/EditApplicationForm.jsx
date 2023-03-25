@@ -3,18 +3,24 @@ import { Stack, Paper, TextField, Button, Box, Snackbar } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import React, { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
+import { useParams } from 'react-router-dom';
 
-import { useAppsDispatch } from './AppsContext.jsx';
+import { useAppsDispatch, useApps } from './AppsContext.jsx';
 
 const Alert = React.forwardRef((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 ));
 
-export default function AddApplicationForm() {
-  const [company, setCompany] = useState('');
-  const [position, setPosition] = useState('');
-  const [location, setLocation] = useState('');
-  const [dateSubmitted, setDateSubmitted] = useState(new Date());
+export default function EditApplicationForm() {
+  const { id } = useParams();
+  const thisApp = { ...useApps().find((app) => app._id === id) };
+
+  const [company, setCompany] = useState(thisApp.company);
+  const [position, setPosition] = useState(thisApp.position);
+  const [location, setLocation] = useState(thisApp.location);
+  const [dateSubmitted, setDateSubmitted] = useState(
+    new Date(thisApp.dateSubmitted)
+  );
 
   const onCompanyChange = (e) => setCompany(e.target.value);
   const onPositionChange = (e) => setPosition(e.target.value);
@@ -33,10 +39,10 @@ export default function AddApplicationForm() {
     setAlert({ ...alert, isOpen: false });
   };
 
-  const submit = async () => {
+  const edit = async () => {
     try {
-      const res = await fetch('/apps/add', {
-        method: 'POST',
+      const res = await fetch(`/apps/edit/${id}`, {
+        method: 'PUT',
         body: JSON.stringify({
           company,
           position,
@@ -61,17 +67,17 @@ export default function AddApplicationForm() {
         setAlert({
           isOpen: true,
           severity: 'success',
-          message: 'Application added successfully',
+          message: 'Application edited successfully',
         });
-        // dispatch (need to get the _id of added application)
+        // dispatch (need to get the _id of added application), therefore add what is returned from Backend, not simply the states in Frontend
         dispatch({
-          type: 'add',
+          type: 'edit',
           payload: data,
         });
 
-        setCompany('');
-        setPosition('');
-        setLocation('');
+        // setCompany('');
+        // setPosition('');
+        // setLocation('');
       }
     } catch (err) {
       setAlert({
@@ -113,12 +119,12 @@ export default function AddApplicationForm() {
         />
         <Box textAlign="center">
           <Button
-            onClick={submit}
+            onClick={edit}
             variant="contained"
             color="success"
             sx={{ width: '30%' }}
           >
-            Submit
+            Edit
           </Button>
         </Box>
       </Stack>

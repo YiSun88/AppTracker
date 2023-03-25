@@ -21,6 +21,10 @@ app.use(express.json());
 
 app.use('/apps', appsRouter);
 
+/*
+ * To-Do: Add a 404 page backup route
+ */
+
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const defaultErr = {
