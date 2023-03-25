@@ -1,5 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { Stack, Paper, TextField, Button, Box, Snackbar } from '@mui/material';
+import {
+  Stack,
+  Paper,
+  TextField,
+  Button,
+  Box,
+  Snackbar,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import React, { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -24,7 +36,6 @@ export default function EditApplicationForm() {
   /*
    Always fetch data from backend on mounting/useEffect hook, to ensure get data from the single source of truth. In addition, this help to ensue proper rendering after refresh. (parent contextProvider will be remounted on refresh as well, fetch there is async so the context will not be available immediately for the useEffect hook.)
    */
-
   useEffect(() => {
     const fetchAnApp = async () => {
       try {
@@ -53,6 +64,8 @@ export default function EditApplicationForm() {
     severity: 'success',
     message: '',
   });
+
+  const [openDelete, setOpenDelete] = useState(false);
 
   const closeAlert = (event, reason) => {
     if (reason === 'clickaway') return;
@@ -106,6 +119,14 @@ export default function EditApplicationForm() {
         message: `${err}`,
       });
     }
+  };
+
+  const handleClickOpenDelete = () => {
+    setOpenDelete(true);
+  };
+
+  const handleClickCloseDelete = () => {
+    setOpenDelete(false);
   };
 
   const deleteApp = async () => {
@@ -181,7 +202,7 @@ export default function EditApplicationForm() {
           </Box>
           <Box textAlign="center">
             <Button
-              onClick={deleteApp}
+              onClick={handleClickOpenDelete}
               variant="contained"
               color="error"
               sx={{ width: '10%' }}
@@ -205,6 +226,20 @@ export default function EditApplicationForm() {
           {alert.message}
         </Alert>
       </Snackbar>
+      <Dialog open={openDelete} onClose={handleClickCloseDelete}>
+        <DialogTitle>Delete this job application?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {`${company}, ${position}, ${location}`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClickCloseDelete}>Keep</Button>
+          <Button onClick={deleteApp} variant="contained" color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 }
