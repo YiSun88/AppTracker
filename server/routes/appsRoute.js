@@ -1,21 +1,74 @@
 /* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
 const router = require('express').Router();
+// eslint-disable-next-line import/no-extraneous-dependencies
+const async = require('async');
+
 const Application = require('../models/Applications.model');
 
 // Get all applications for the Frontend table
-router.get('/', (req, res, next) => {
-  Application.find()
-    .then((applications) => res.status(200).json(applications))
-    .catch((err) =>
-      next({
-        log: `Error encountered in application get "/" route, when finding all apps in database. ${err}`,
-        status: 503,
-        message: {
-          err: 'An error occurred when finding all apps in database.',
-        },
-      })
-    );
+router.get('/', async (req, res, next) => {
+  try {
+    const results = await async.parallel({
+      apps: async () => {
+        const apps = await Application.find();
+        return apps;
+      },
+
+      // Not used
+      submittedCount: async () => {
+        const submittedCount = await Application.countDocuments({
+          dateSubmitted: { $exists: true },
+        });
+        return submittedCount;
+      },
+    });
+    res.status(200).json(results);
+  } catch (err) {
+    next({
+      log: `Error encountered in application get "/" route. ${err}`,
+      status: 500,
+      message: {
+        err: 'An error occurred when getting the applications.',
+      },
+    });
+  }
+});
+// router.get('/', (req, res, next) => {
+//   Application.find()
+//     .then((applications) => res.status(200).json(applications))
+//     .catch((err) =>
+//       next({
+//         log: `Error encountered in application get "/" route, when finding all apps in database. ${err}`,
+//         status: 503,
+//         message: {
+//           err: 'An error occurred when finding all apps in database.',
+//         },
+//       })
+//     );
+// });
+
+// Get all statistic counts
+router.get('/counts', async (req, res, next) => {
+  try {
+    const results = await async.parallel({
+      submittedCount: async () => {
+        const submittedCount = await Application.countDocuments({
+          dateSubmitted: { $exists: true },
+        });
+        return submittedCount;
+      },
+    });
+    res.status(200).json(results);
+  } catch (err) {
+    next({
+      log: `Error encountered in application get "/counts" route. ${err}`,
+      status: 500,
+      message: {
+        err: 'An error occurred when getting the counts.',
+      },
+    });
+  }
 });
 
 // Add a new job application

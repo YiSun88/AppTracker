@@ -6,16 +6,17 @@ const { Schema } = mongoose;
  * Need to export this activitySchema as well? or activities can be added as object?
  * https://stackoverflow.com/questions/70481291/adding-element-inside-nested-array-in-mongoose
  */
-const activitySchema = new Schema({
-  activity: {
-    type: String,
-    required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-});
+
+// const activitySchema = new Schema({
+//   activity: {
+//     type: String,
+//     required: true,
+//   },
+//   date: {
+//     type: Date,
+//     required: true,
+//   },
+// });
 
 const applicationSchema = new Schema({
   company: {
@@ -38,9 +39,9 @@ const applicationSchema = new Schema({
   nextDue: {
     type: Date,
   },
-  history: {
-    type: [activitySchema],
-  },
+  // history: {
+  //   type: [activitySchema],
+  // },
   note: {
     type: String,
   },

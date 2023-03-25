@@ -14,7 +14,7 @@ export default function AddApplicationForm() {
   const [company, setCompany] = useState('');
   const [position, setPosition] = useState('');
   const [location, setLocation] = useState('');
-  const [dateSubmitted, setDateSubmitted] = useState(new Date());
+  const [dateSubmitted, setDateSubmitted] = useState(null);
 
   const onCompanyChange = (e) => setCompany(e.target.value);
   const onPositionChange = (e) => setPosition(e.target.value);
