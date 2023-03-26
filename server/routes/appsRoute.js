@@ -51,12 +51,44 @@ router.get('/', async (req, res, next) => {
 // Get all statistic counts
 router.get('/counts', async (req, res, next) => {
   try {
+    /*
+     * To-Do: refactor to aggregate MongoDB query(iterate through the Collection only once to get all counts) to further optimize performance.
+     */
+
     const results = await async.parallel({
       submittedCount: async () => {
         const submittedCount = await Application.countDocuments({
           dateSubmitted: { $ne: null },
         });
         return submittedCount;
+      },
+
+      interviewCount: async () => {
+        const interviewCount = await Application.countDocuments({
+          status: 'Interview Scheduled',
+        });
+        return interviewCount;
+      },
+
+      offerCount: async () => {
+        const offerCount = await Application.countDocuments({
+          status: 'Offer Received',
+        });
+        return offerCount;
+      },
+
+      remoteCount: async () => {
+        const remoteCount = await Application.countDocuments({
+          location: /remote/i,
+        });
+        return remoteCount;
+      },
+
+      houstonCount: async () => {
+        const houstonCount = await Application.countDocuments({
+          location: /houston/i,
+        });
+        return houstonCount;
       },
     });
     res.status(200).json(results);
@@ -73,12 +105,13 @@ router.get('/counts', async (req, res, next) => {
 
 // Add a new job application
 router.post('/add', (req, res, next) => {
-  const { company, position, location, dateSubmitted } = req.body;
+  const { company, position, location, status, dateSubmitted } = req.body;
 
   const newApp = new Application({
     company,
     position,
     location,
+    status,
     dateSubmitted,
   });
 
@@ -112,7 +145,7 @@ router.post('/add', (req, res, next) => {
 // Edit an existing job application
 router.put('/edit/:id', async (req, res, next) => {
   const { id } = req.params;
-  const { company, position, location, dateSubmitted } = req.body;
+  const { company, position, location, status, dateSubmitted } = req.body;
 
   try {
     const updatedApp = await Application.findByIdAndUpdate(
@@ -121,6 +154,7 @@ router.put('/edit/:id', async (req, res, next) => {
         company,
         position,
         location,
+        status,
         dateSubmitted,
       },
       { returnDocument: 'after' }

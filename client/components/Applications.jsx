@@ -65,7 +65,7 @@ export default function Applications() {
       }}
     >
       <Title>Applications</Title>
-      <TableContainer sx={{ maxHeight: 550 }}>
+      <TableContainer sx={{ maxHeight: '70vh' }}>
         <Table size="medium" stickyHeader>
           <TableHead>
             <TableRow>
@@ -115,9 +115,9 @@ export default function Applications() {
           </TableBody>
         </Table>
       </TableContainer>
-      <MUILink color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
+      {/* <MUILink color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
         See more applications
-      </MUILink>
+      </MUILink> */}
     </Paper>
   );
 }

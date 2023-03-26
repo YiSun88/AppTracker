@@ -11,6 +11,7 @@ const activitySchema = new Schema({
   activity: {
     type: String,
     required: true,
+    trim: true,
   },
   date: {
     type: Date,
@@ -22,20 +23,24 @@ const applicationSchema = new Schema({
   company: {
     type: String,
     required: true,
+    trim: true,
   },
   position: {
     type: String,
     required: true,
+    trim: true,
   },
   location: {
     type: String,
     required: true,
+    trim: true,
   },
   dateSubmitted: {
     type: Date,
   },
   status: {
     type: String,
+    trim: true,
   },
   nextDue: {
     type: Date,

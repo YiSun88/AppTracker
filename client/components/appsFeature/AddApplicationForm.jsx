@@ -7,6 +7,10 @@ import {
   Snackbar,
   Grid,
   Divider,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import React, { useState } from 'react';
@@ -22,14 +26,19 @@ export default function AddApplicationForm() {
   const [company, setCompany] = useState('');
   const [position, setPosition] = useState('');
   const [location, setLocation] = useState('');
+  const [status, setStatus] = useState('');
   const [dateSubmitted, setDateSubmitted] = useState(null);
 
   const onCompanyChange = (e) => setCompany(e.target.value);
   const onPositionChange = (e) => setPosition(e.target.value);
   const onLocationChange = (e) => setLocation(e.target.value);
+  const onStatusChange = (e) => setStatus(e.target.value);
 
   const dispatch = useAppsDispatch();
 
+  /*
+   * Alert control for the snackbar at bottom right corner.
+   */
   const [alert, setAlert] = useState({
     isOpen: false,
     severity: 'success',
@@ -41,6 +50,7 @@ export default function AddApplicationForm() {
     setAlert({ ...alert, isOpen: false });
   };
 
+  // Sumbit Button OnClick Handler
   const submit = async () => {
     try {
       const res = await fetch('/apps/add', {
@@ -49,6 +59,7 @@ export default function AddApplicationForm() {
           company,
           position,
           location,
+          status,
           dateSubmitted,
         }),
         /*
@@ -80,6 +91,7 @@ export default function AddApplicationForm() {
         setCompany('');
         setPosition('');
         setLocation('');
+        setStatus('');
       }
     } catch (err) {
       setAlert({
@@ -92,7 +104,6 @@ export default function AddApplicationForm() {
 
   return (
     <Paper sx={{ p: 2, pl: 6, display: 'flex', flexDirection: 'column' }}>
-      {/* <Stack spacing={2}> */}
       <Grid container spacing={2}>
         <Grid item xs={12} md={12} lg={12}>
           <TextField
@@ -101,7 +112,7 @@ export default function AddApplicationForm() {
             value={company}
             variant="outlined"
             onChange={onCompanyChange}
-            sx={{ width: '100%' }}
+            fullWidth
           />
         </Grid>
         <Grid item xs={12}>
@@ -111,7 +122,7 @@ export default function AddApplicationForm() {
             value={position}
             variant="outlined"
             onChange={onPositionChange}
-            sx={{ width: '100%' }}
+            fullWidth
           />
         </Grid>
         <Grid item xs={12}>
@@ -121,31 +132,43 @@ export default function AddApplicationForm() {
             value={location}
             variant="outlined"
             onChange={onLocationChange}
-            sx={{ width: '100%' }}
+            fullWidth
           />
         </Grid>
       </Grid>
 
-      <Divider textAlign="right" sx={{ marginTop: 3 }}>
+      {/* Status Options Selecter */}
+      <Divider
+        textAlign="right"
+        sx={{ marginTop: 3, color: 'primary.main', fontSize: '1.2rem' }}
+      >
         Status
       </Divider>
 
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6} lg={4}>
-              <DatePicker
-                label="Status"
-                value={dateSubmitted}
-                onChange={(newValue) => setDateSubmitted(newValue)}
-                sx={{ width: '100%' }}
-              />
-            </Grid>
-          </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <FormControl fullWidth>
+            <InputLabel>Status</InputLabel>
+            <Select value={status} label="Status" onChange={onStatusChange}>
+              <MenuItem value="Not Submitted">Not Submitted</MenuItem>
+              <MenuItem value="Application Submitted">
+                Application Submitted
+              </MenuItem>
+              <MenuItem value="Interview Scheduled">
+                Interview Scheduled
+              </MenuItem>
+              <MenuItem value="Offer Received">Offer Received</MenuItem>
+              <MenuItem value="Rejected">Rejected</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
       </Grid>
 
-      <Divider textAlign="right" sx={{ marginTop: 3 }}>
+      {/* Milestone Date Pickers */}
+      <Divider
+        textAlign="right"
+        sx={{ marginTop: 3, color: 'primary.main', fontSize: '1.2rem' }}
+      >
         Milestones
       </Divider>
 
@@ -210,6 +233,7 @@ export default function AddApplicationForm() {
             sx={{ width: '100%' }}
           />
         </Grid>
+
         <Grid item xs={12}>
           <Box textAlign="center">
             <Button
@@ -223,7 +247,8 @@ export default function AddApplicationForm() {
           </Box>
         </Grid>
       </Grid>
-      {/* </Stack> */}
+
+      {/* Slide-in alert at bottom right corner. */}
       <Snackbar
         open={alert.isOpen}
         autoHideDuration={5000}
