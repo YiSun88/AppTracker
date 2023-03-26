@@ -65,7 +65,7 @@ export default function Applications() {
       }}
     >
       <Title>Applications</Title>
-      <TableContainer sx={{ maxHeight: 600 }}>
+      <TableContainer sx={{ maxHeight: 550 }}>
         <Table size="medium" stickyHeader>
           <TableHead>
             <TableRow>

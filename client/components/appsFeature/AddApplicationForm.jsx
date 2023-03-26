@@ -126,7 +126,7 @@ export default function AddApplicationForm() {
         </Grid>
       </Grid>
 
-      <Divider textAlign="left" sx={{ marginTop: 3 }}>
+      <Divider textAlign="right" sx={{ marginTop: 3 }}>
         Status
       </Divider>
 
@@ -144,7 +144,8 @@ export default function AddApplicationForm() {
           </Grid>
         </Grid>
       </Grid>
-      <Divider textAlign="left" sx={{ marginTop: 3 }}>
+
+      <Divider textAlign="right" sx={{ marginTop: 3 }}>
         Milestones
       </Divider>
 
