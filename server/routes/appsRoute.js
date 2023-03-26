@@ -54,7 +54,7 @@ router.get('/counts', async (req, res, next) => {
     const results = await async.parallel({
       submittedCount: async () => {
         const submittedCount = await Application.countDocuments({
-          dateSubmitted: { $exists: true },
+          dateSubmitted: { $ne: null },
         });
         return submittedCount;
       },

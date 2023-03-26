@@ -50,7 +50,10 @@ export default function Applications() {
   const apps = useApps()
     .slice(0)
     .sort((a, b) =>
-      compareDesc(new Date(a.dateSubmitted), new Date(b.dateSubmitted))
+      compareDesc(
+        new Date(a.dateSubmitted ? a.dateSubmitted : 10 ** 15),
+        new Date(b.dateSubmitted ? b.dateSubmitted : 10 ** 15)
+      )
     );
 
   return (
