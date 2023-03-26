@@ -105,7 +105,8 @@ router.get('/counts', async (req, res, next) => {
 
 // Add a new job application
 router.post('/add', (req, res, next) => {
-  const { company, position, location, status, dateSubmitted } = req.body;
+  const { company, position, location, status, dateSubmitted, notes } =
+    req.body;
 
   const newApp = new Application({
     company,
@@ -113,6 +114,7 @@ router.post('/add', (req, res, next) => {
     location,
     status,
     dateSubmitted,
+    notes,
   });
 
   /*
@@ -145,7 +147,8 @@ router.post('/add', (req, res, next) => {
 // Edit an existing job application
 router.put('/edit/:id', async (req, res, next) => {
   const { id } = req.params;
-  const { company, position, location, status, dateSubmitted } = req.body;
+  const { company, position, location, status, dateSubmitted, notes } =
+    req.body;
 
   try {
     const updatedApp = await Application.findByIdAndUpdate(
@@ -156,6 +159,7 @@ router.put('/edit/:id', async (req, res, next) => {
         location,
         status,
         dateSubmitted,
+        notes,
       },
       { returnDocument: 'after' }
     );

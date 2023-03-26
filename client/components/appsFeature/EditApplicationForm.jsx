@@ -37,11 +37,13 @@ export default function EditApplicationForm() {
   const [location, setLocation] = useState('');
   const [status, setStatus] = useState('');
   const [dateSubmitted, setDateSubmitted] = useState(new Date());
+  const [notes, setNotes] = useState('');
 
   const onCompanyChange = (e) => setCompany(e.target.value);
   const onPositionChange = (e) => setPosition(e.target.value);
   const onLocationChange = (e) => setLocation(e.target.value);
   const onStatusChange = (e) => setStatus(e.target.value);
+  const onNotesChange = (e) => setNotes(e.target.value);
 
   const navigate = useNavigate();
 
@@ -61,6 +63,7 @@ export default function EditApplicationForm() {
         setDateSubmitted(
           app.dateSubmitted ? new Date(app.dateSubmitted) : null
         );
+        setNotes(app.notes);
       } catch (err) {
         console.log('Error when fetching this application from Backend.');
       }
@@ -91,6 +94,7 @@ export default function EditApplicationForm() {
           location,
           status,
           dateSubmitted,
+          notes,
         }),
         /*
          * Always set the content-type header to let server recognize and parse JSON!
@@ -175,7 +179,6 @@ export default function EditApplicationForm() {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
-            id="outlined-basic"
             label="Company (required)"
             value={company}
             variant="outlined"
@@ -185,7 +188,6 @@ export default function EditApplicationForm() {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="outlined-basic"
             label="Job Position (required)"
             value={position}
             variant="outlined"
@@ -195,7 +197,6 @@ export default function EditApplicationForm() {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="outlined-basic"
             label="Location (required)"
             value={location}
             variant="outlined"
@@ -299,6 +300,28 @@ export default function EditApplicationForm() {
             value={dateSubmitted}
             onChange={(newValue) => setDateSubmitted(newValue)}
             sx={{ width: '100%' }}
+          />
+        </Grid>
+      </Grid>
+
+      {/* Notes */}
+      <Divider
+        textAlign="right"
+        sx={{ marginTop: 3, color: 'primary.main', fontSize: '1.2rem' }}
+      >
+        Notes
+      </Divider>
+
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={12} lg={12}>
+          <TextField
+            label="Notes"
+            value={notes}
+            variant="outlined"
+            onChange={onNotesChange}
+            fullWidth
+            multiline
+            rows={4}
           />
         </Grid>
       </Grid>

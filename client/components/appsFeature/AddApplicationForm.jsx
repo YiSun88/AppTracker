@@ -15,6 +15,7 @@ import {
 import MuiAlert from '@mui/material/Alert';
 import React, { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppsDispatch } from './AppsContext.jsx';
 
@@ -28,13 +29,16 @@ export default function AddApplicationForm() {
   const [location, setLocation] = useState('');
   const [status, setStatus] = useState('');
   const [dateSubmitted, setDateSubmitted] = useState(null);
+  const [notes, setNotes] = useState('');
 
   const onCompanyChange = (e) => setCompany(e.target.value);
   const onPositionChange = (e) => setPosition(e.target.value);
   const onLocationChange = (e) => setLocation(e.target.value);
   const onStatusChange = (e) => setStatus(e.target.value);
+  const onNotesChange = (e) => setNotes(e.target.value);
 
   const dispatch = useAppsDispatch();
+  const navigate = useNavigate();
 
   /*
    * Alert control for the snackbar at bottom right corner.
@@ -61,6 +65,7 @@ export default function AddApplicationForm() {
           location,
           status,
           dateSubmitted,
+          notes,
         }),
         /*
          * Always set the content-type header to let server recognize and parse JSON!
@@ -88,10 +93,7 @@ export default function AddApplicationForm() {
           payload: data,
         });
 
-        setCompany('');
-        setPosition('');
-        setLocation('');
-        setStatus('');
+        navigate('/applications');
       }
     } catch (err) {
       setAlert({
@@ -107,7 +109,6 @@ export default function AddApplicationForm() {
       <Grid container spacing={2}>
         <Grid item xs={12} md={12} lg={12}>
           <TextField
-            id="outlined-basic"
             label="Company (required)"
             value={company}
             variant="outlined"
@@ -117,7 +118,6 @@ export default function AddApplicationForm() {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="outlined-basic"
             label="Job Position (required)"
             value={position}
             variant="outlined"
@@ -127,7 +127,6 @@ export default function AddApplicationForm() {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            id="outlined-basic"
             label="Location (required)"
             value={location}
             variant="outlined"
@@ -233,7 +232,32 @@ export default function AddApplicationForm() {
             sx={{ width: '100%' }}
           />
         </Grid>
+      </Grid>
 
+      {/* Notes */}
+      <Divider
+        textAlign="right"
+        sx={{ marginTop: 3, color: 'primary.main', fontSize: '1.2rem' }}
+      >
+        Notes
+      </Divider>
+
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={12} lg={12}>
+          <TextField
+            label="Notes"
+            value={notes}
+            variant="outlined"
+            onChange={onNotesChange}
+            fullWidth
+            multiline
+            rows={4}
+          />
+        </Grid>
+      </Grid>
+
+      {/* Submit Button */}
+      <Grid container spacing={2} marginTop="1rem">
         <Grid item xs={12}>
           <Box textAlign="center">
             <Button

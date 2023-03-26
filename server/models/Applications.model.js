@@ -48,7 +48,7 @@ const applicationSchema = new Schema({
   history: {
     type: [activitySchema],
   },
-  note: {
+  notes: {
     type: String,
   },
   link: {
