@@ -48,7 +48,7 @@ export default function EditApplicationForm() {
   const navigate = useNavigate();
 
   /*
-   Always fetch data from backend on mounting/useEffect hook, to ensure get data from the single source of truth. In addition, this help to ensue proper rendering after refresh. (parent contextProvider will be remounted on refresh as well, fetch there is async so the context will not be available immediately for the useEffect hook.)
+   Always fetch data from backend on mounting/useEffect hook, to ensure get data from the single source of truth. In addition, this help to ensue proper rendering after refresh. (parent contextProvider will be remounted on refresh as well, fetch run in context is async so the context will not be available immediately for the useEffect hook.)
    */
   useEffect(() => {
     const fetchAnApp = async () => {

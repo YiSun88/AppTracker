@@ -9,21 +9,8 @@ const Application = require('../models/Applications.model');
 // Get all applications for the Frontend table
 router.get('/', async (req, res, next) => {
   try {
-    const results = await async.parallel({
-      apps: async () => {
-        const apps = await Application.find();
-        return apps;
-      },
-
-      // Not used
-      submittedCount: async () => {
-        const submittedCount = await Application.countDocuments({
-          dateSubmitted: { $exists: true },
-        });
-        return submittedCount;
-      },
-    });
-    res.status(200).json(results);
+    const apps = await Application.find();
+    res.status(200).json(apps);
   } catch (err) {
     next({
       log: `Error encountered in application get "/" route. ${err}`,
@@ -98,6 +85,34 @@ router.get('/counts', async (req, res, next) => {
       status: 500,
       message: {
         err: 'An error occurred when getting the counts.',
+      },
+    });
+  }
+});
+
+// Get counts by months
+router.get('/counts/months', async (req, res, next) => {
+  try {
+    const countByMonth = await Application.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: '$dateSubmitted' },
+            month: { $month: '$dateSubmitted' },
+          },
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+    ]);
+    res.status(200).json(countByMonth);
+  } catch (err) {
+    next({
+      log: `Error encountered in application get "/counts/months" route, ${err}`,
+      status: 500,
+      message: {
+        err: 'An error occurred when getting the applicaiton counts by months.',
       },
     });
   }

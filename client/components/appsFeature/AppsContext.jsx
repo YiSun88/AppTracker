@@ -29,7 +29,7 @@ export function AppsProvider({ children }) {
           // });
           dispatch({
             type: 'initialize',
-            payload: data.apps,
+            payload: data,
           });
         })
         .catch(() => {

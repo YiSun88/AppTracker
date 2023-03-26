@@ -9,6 +9,7 @@ import Applications from './components/Applications.jsx';
 import { AppsProvider } from './components/appsFeature/AppsContext.jsx';
 import AddApplicationForm from './components/appsFeature/AddApplicationForm.jsx';
 import EditApplicationForm from './components/appsFeature/EditApplicationForm.jsx';
+import BarChart from './components/Chart.jsx';
 
 function App() {
   return (
@@ -35,6 +36,9 @@ function App() {
                   path="/applications/edit/:id"
                   element={<EditApplicationForm />}
                 />
+
+                {/* Submittal by Week Bar Chart */}
+                <Route path="/submittalbyweek" element={<BarChart />} />
               </Routes>
             </Borders>
           </LocalizationProvider>

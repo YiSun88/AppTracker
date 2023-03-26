@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import { format } from 'date-fns';
 
 import Title from './Title.jsx';
-// import { Chart, StatusChart } from './Chart.jsx';
 
 // function preventDefault(event) {
 //   event.preventDefault();
@@ -155,21 +154,7 @@ export default function Dashboard() {
         </Grid>
       </Grid>
 
-      {/* Chart */}
-      {/* <Grid item xs={12} md={8} lg={9}>
-        <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            height: 240,
-          }}
-        >
-          <Chart />
-        </Paper>
-      </Grid> */}
-
-      {/* Bar Chart for Application Status */}
+      {/* Bar Chart Insert Example */}
       {/* <Grid item xs={12}>
         <Paper
           sx={{
@@ -179,7 +164,7 @@ export default function Dashboard() {
             height: 240,
           }}
         >
-          <StatusChart />
+          <BarChart />
         </Paper>
       </Grid> */}
     </>
