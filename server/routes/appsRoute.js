@@ -1,7 +1,4 @@
-/* eslint-disable function-paren-newline */
-/* eslint-disable implicit-arrow-linebreak */
 const router = require('express').Router();
-// eslint-disable-next-line import/no-extraneous-dependencies
 const async = require('async');
 
 const Application = require('../models/Applications.model');
@@ -27,19 +24,6 @@ router.get('/', async (req, res, next) => {
     });
   }
 });
-// router.get('/', (req, res, next) => {
-//   Application.find()
-//     .then((applications) => res.status(200).json(applications))
-//     .catch((err) =>
-//       next({
-//         log: `Error encountered in application get "/" route, when finding all apps in database. ${err}`,
-//         status: 503,
-//         message: {
-//           err: 'An error occurred when finding all apps in database.',
-//         },
-//       })
-//     );
-// });
 
 // Get all statistic counts
 router.get('/counts', async (req, res, next) => {

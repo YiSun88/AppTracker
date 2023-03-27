@@ -16,6 +16,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <AppsProvider>
+          {/* LocalizationProvider supports the date picker component */}
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Borders>
               <Routes>

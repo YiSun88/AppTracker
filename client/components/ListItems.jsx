@@ -32,12 +32,6 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="New Application" />
     </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <SearchIcon />
-      </ListItemIcon>
-      <ListItemText primary="Search Application" />
-    </ListItemButton>
     <ListItemButton component={Link} to="/submittalbyweek">
       <ListItemIcon>
         <BarChartIcon />
