@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 
@@ -19,14 +20,18 @@ export function AppsProvider({ children }) {
         .then((res) => res.json())
         .then((data) => {
           /*
-           * Keep the dates in frontend context as string, to avoid large amount converting after the first fetch request. Instead, only do converting when certain dates are requried to be rendered.
+           * Not True --> (Keep the dates in frontend context as string, to avoid large amount converting after the first fetch request. Instead, only do converting when certain dates are requried to be rendered.)
            */
-          // data.forEach((element) => {
-          //   if (element.dateSubmitted) {
-          //     // eslint-disable-next-line no-param-reassign
-          //     element.dateSubmitted = new Date(element.dateSubmitted);
-          //   }
-          // });
+          data.forEach((element) => {
+            if (element.dateSubmitted) {
+              element.dateSubmitted = new Date(element.dateSubmitted);
+            }
+            element.history.forEach((el) => {
+              if (el.date) {
+                el.date = new Date(el.date);
+              }
+            });
+          });
           dispatch({
             type: 'initialize',
             payload: data,
@@ -64,7 +69,23 @@ function appsReducer(apps, action) {
     }
     case 'add': {
       if (apps.findIndex((app) => app._id === action.payload._id) === -1) {
-        return [...apps, action.payload];
+        const newApps = [...apps, action.payload];
+
+        // Sort the newly added applicaiton in the previously sorted array.
+        const MAXDATE = 10 ** 15;
+        for (let i = newApps.length - 1; i >= 1; i -= 1) {
+          if (
+            (newApps[i].dateSubmitted ? newApps[i].dateSubmitted : MAXDATE) -
+              (newApps[i - 1].dateSubmitted
+                ? newApps[i - 1].dateSubmitted
+                : MAXDATE) >
+            0
+          ) {
+            [newApps[i], newApps[i - 1]] = [newApps[i - 1], newApps[i]];
+          } else break;
+        }
+        console.log(newApps);
+        return newApps;
       }
       return apps;
     }

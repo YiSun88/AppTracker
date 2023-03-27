@@ -22,20 +22,20 @@ export default function BarChartByWeek() {
   const apps = useApps();
   const today = new Date();
 
-  const calcWeekBoundary = (index) =>
-    `${format(subDays(today, 7 * index), 'M/d')}`;
+  const calcWeekBoundary = (index, delta) =>
+    `${format(subDays(today, 7 * index + delta), 'M/d')}`;
   const xAxisRange = 12;
 
   const data = Array.from({ length: xAxisRange }, (el, i) => ({
-    week: `${calcWeekBoundary(xAxisRange - i)} 
-          - ${calcWeekBoundary(xAxisRange - i - 1)}`,
+    week: `${calcWeekBoundary(xAxisRange - i, 0)} 
+          - ${calcWeekBoundary(xAxisRange - i - 1, 1)}`,
     amount: 0,
   }));
 
   apps.forEach((app) => {
     if (app.dateSubmitted) {
       const index = Math.floor(
-        differenceInCalendarDays(today, new Date(app.dateSubmitted)) / 7
+        differenceInCalendarDays(today, app.dateSubmitted) / 7
       );
 
       if (index < data.length && index >= 0) {
@@ -84,7 +84,7 @@ export default function BarChartByWeek() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" opacity={0.5} />
-            <XAxis dataKey="week" interval="preserveStartEnd" />
+            <XAxis dataKey="week" interval="preserveEnd" />
             <YAxis
               type="number"
               domain={[0, 'dataMax + 1']}

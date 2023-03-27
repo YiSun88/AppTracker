@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Paper, styled, useTheme, Button } from '@mui/material';
-import { format, compareDesc } from 'date-fns';
+import { format } from 'date-fns';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import { Link } from 'react-router-dom';
@@ -42,19 +42,12 @@ const TableHeadCell = styled(TableCell)(({ theme }) => ({
 }));
 
 export default function Applications() {
-  const preventDefault = useCallback((event) => {
-    event.preventDefault();
-  }, []);
+  // const preventDefault = useCallback((event) => {
+  //   event.preventDefault();
+  // }, []);
 
   const theme = useTheme();
-  const apps = useApps()
-    .slice(0)
-    .sort((a, b) =>
-      compareDesc(
-        new Date(a.dateSubmitted ? a.dateSubmitted : 10 ** 15),
-        new Date(b.dateSubmitted ? b.dateSubmitted : 10 ** 15)
-      )
-    );
+  const apps = useApps();
 
   return (
     <Paper
@@ -89,7 +82,7 @@ export default function Applications() {
                 <TableCell>{app.status}</TableCell>
                 <TableCell>
                   {app.dateSubmitted
-                    ? format(new Date(app.dateSubmitted), 'MM/dd/yyyy')
+                    ? format(app.dateSubmitted, 'MM/dd/yyyy')
                     : ''}
                 </TableCell>
                 <TableCell align="center">

@@ -10,6 +10,12 @@ const Application = require('../models/Applications.model');
 router.get('/', async (req, res, next) => {
   try {
     const apps = await Application.find();
+    const MAXDATE = 10 ** 15;
+    apps.sort(
+      (a, b) =>
+        (b.dateSubmitted ? b.dateSubmitted : MAXDATE) -
+        (a.dateSubmitted ? a.dateSubmitted : MAXDATE)
+    );
     res.status(200).json(apps);
   } catch (err) {
     next({
