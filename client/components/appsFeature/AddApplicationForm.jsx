@@ -19,6 +19,8 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppsDispatch } from './AppsContext.jsx';
+import Timeline from './Timeline.jsx';
+import createHistoryArray from '../../constant/createHistoryArray';
 
 const Alert = React.forwardRef((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -30,6 +32,12 @@ export default function AddApplicationForm() {
   const [location, setLocation] = useState('');
   const [status, setStatus] = useState('');
   const [dateSubmitted, setDateSubmitted] = useState(null);
+  const [onlineAssessment, setOnlineAssessment] = useState(null);
+  const [firstInterview, setFirstInterview] = useState(null);
+  const [secondInterview, setSecondInterview] = useState(null);
+  const [thirdInterview, setThirdInterview] = useState(null);
+  const [offerDate, setOfferDate] = useState(null);
+  const [rejectedDate, setRejectedDate] = useState(null);
   const [notes, setNotes] = useState('');
 
   const onCompanyChange = (e) => setCompany(e.target.value);
@@ -58,6 +66,15 @@ export default function AddApplicationForm() {
   // Sumbit Button OnClick Handler
   const submit = async () => {
     try {
+      const history = createHistoryArray([
+        dateSubmitted,
+        onlineAssessment,
+        firstInterview,
+        secondInterview,
+        thirdInterview,
+        offerDate,
+        rejectedDate,
+      ]);
       const res = await fetch('/apps/add', {
         method: 'POST',
         body: JSON.stringify({
@@ -66,6 +83,7 @@ export default function AddApplicationForm() {
           location,
           status,
           dateSubmitted,
+          history,
           notes,
         }),
         /*
@@ -180,104 +198,122 @@ export default function AddApplicationForm() {
         Milestones
       </Divider>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+      <Grid container>
+        <Grid item xs={12} md={9}>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6} lg={4}>
+                  <DatePicker
+                    label="Date Submitted"
+                    value={dateSubmitted}
+                    onChange={(newValue) => setDateSubmitted(newValue)}
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <DatePicker
+                    label="Online Assessment"
+                    value={onlineAssessment}
+                    onChange={(newValue) => setOnlineAssessment(newValue)}
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <DatePicker
-                label="Date Submitted"
-                value={dateSubmitted}
-                onChange={(newValue) => setDateSubmitted(newValue)}
+                label="1st Interview"
+                value={firstInterview}
+                onChange={(newValue) => setFirstInterview(newValue)}
                 sx={{ width: '100%' }}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <DatePicker
-                label="Online Assessment"
-                value={dateSubmitted}
-                onChange={(newValue) => setDateSubmitted(newValue)}
+                label="2nd Interview"
+                value={secondInterview}
+                onChange={(newValue) => setSecondInterview(newValue)}
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <DatePicker
+                label="3nd Interview"
+                value={thirdInterview}
+                onChange={(newValue) => setThirdInterview(newValue)}
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <DatePicker
+                label="Offer Received"
+                value={offerDate}
+                onChange={(newValue) => setOfferDate(newValue)}
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <DatePicker
+                label="Rejected"
+                value={rejectedDate}
+                onChange={(newValue) => setRejectedDate(newValue)}
                 sx={{ width: '100%' }}
               />
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="1st Interview"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="2nd Interview"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="3nd Interview"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="Offer Received"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="Rejected"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
-      </Grid>
 
-      {/* Notes */}
-      <Divider
-        textAlign="right"
-        sx={{ marginTop: 3, color: 'primary.main', fontSize: '1.2rem' }}
-      >
-        Notes
-      </Divider>
+          {/* Notes */}
+          <Divider
+            textAlign="right"
+            sx={{ marginTop: 3, color: 'primary.main', fontSize: '1.2rem' }}
+          >
+            Notes
+          </Divider>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={12} lg={12}>
-          <TextField
-            label="Notes"
-            value={notes}
-            variant="outlined"
-            onChange={onNotesChange}
-            fullWidth
-            multiline
-            rows={4}
-          />
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={12} lg={12}>
+              <TextField
+                label="Notes"
+                value={notes}
+                variant="outlined"
+                onChange={onNotesChange}
+                fullWidth
+                multiline
+                rows={4}
+              />
+            </Grid>
+          </Grid>
+
+          {/* Submit Button */}
+          <Grid container spacing={2} marginTop="1rem">
+            <Grid item xs={12}>
+              <Box textAlign="center">
+                <Button
+                  onClick={submit}
+                  variant="contained"
+                  color="success"
+                  sx={{ width: '30%' }}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
 
-      {/* Submit Button */}
-      <Grid container spacing={2} marginTop="1rem">
-        <Grid item xs={12}>
-          <Box textAlign="center">
-            <Button
-              onClick={submit}
-              variant="contained"
-              color="success"
-              sx={{ width: '30%' }}
-            >
-              Submit
-            </Button>
-          </Box>
+        <Grid item xs={12} md={3}>
+          <Timeline
+            timeline={[
+              dateSubmitted,
+              onlineAssessment,
+              firstInterview,
+              secondInterview,
+              thirdInterview,
+              offerDate,
+              rejectedDate,
+            ]}
+          />
         </Grid>
       </Grid>
 

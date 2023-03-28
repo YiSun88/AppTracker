@@ -110,7 +110,7 @@ router.get('/counts/months', async (req, res, next) => {
 
 // Add a new job application
 router.post('/add', (req, res, next) => {
-  const { company, position, location, status, dateSubmitted, notes } =
+  const { company, position, location, status, dateSubmitted, history, notes } =
     req.body;
 
   const newApp = new Application({
@@ -119,6 +119,7 @@ router.post('/add', (req, res, next) => {
     location,
     status,
     dateSubmitted,
+    history,
     notes,
   });
 
@@ -152,7 +153,7 @@ router.post('/add', (req, res, next) => {
 // Edit an existing job application
 router.put('/edit/:id', async (req, res, next) => {
   const { id } = req.params;
-  const { company, position, location, status, dateSubmitted, notes } =
+  const { company, position, location, status, dateSubmitted, history, notes } =
     req.body;
 
   try {
@@ -164,6 +165,7 @@ router.put('/edit/:id', async (req, res, next) => {
         location,
         status,
         dateSubmitted,
+        history,
         notes,
       },
       { returnDocument: 'after' }

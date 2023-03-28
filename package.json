@@ -22,6 +22,7 @@
     "@emotion/styled": "^11.10.6",
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.11.11",
+    "@mui/lab": "^5.0.0-alpha.124",
     "@mui/material": "^5.11.13",
     "@mui/x-date-pickers": "^6.0.3",
     "async": "^3.2.4",

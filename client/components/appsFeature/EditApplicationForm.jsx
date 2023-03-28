@@ -25,6 +25,8 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAppsDispatch } from './AppsContext.jsx';
+import createHistoryArray from '../../constant/createHistoryArray';
+import Timeline from './Timeline.jsx';
 
 const Alert = React.forwardRef((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -38,6 +40,12 @@ export default function EditApplicationForm() {
   const [location, setLocation] = useState('');
   const [status, setStatus] = useState('');
   const [dateSubmitted, setDateSubmitted] = useState(new Date());
+  const [onlineAssessment, setOnlineAssessment] = useState(null);
+  const [firstInterview, setFirstInterview] = useState(null);
+  const [secondInterview, setSecondInterview] = useState(null);
+  const [thirdInterview, setThirdInterview] = useState(null);
+  const [offerDate, setOfferDate] = useState(null);
+  const [rejectedDate, setRejectedDate] = useState(null);
   const [notes, setNotes] = useState('');
 
   const onCompanyChange = (e) => setCompany(e.target.value);
@@ -57,12 +65,31 @@ export default function EditApplicationForm() {
         const app = await (
           await fetch(`/apps/${id}`, { method: 'GET' })
         ).json();
+        console.log(app);
         setCompany(app.company);
         setPosition(app.position);
         setLocation(app.location);
         setStatus(app.status);
         setDateSubmitted(
           app.dateSubmitted ? new Date(app.dateSubmitted) : null
+        );
+        setOnlineAssessment(
+          app.history[1].date ? new Date(app.history[1].date) : null
+        );
+        setFirstInterview(
+          app.history[2].date ? new Date(app.history[2].date) : null
+        );
+        setSecondInterview(
+          app.history[3].date ? new Date(app.history[3].date) : null
+        );
+        setThirdInterview(
+          app.history[4].date ? new Date(app.history[4].date) : null
+        );
+        setOfferDate(
+          app.history[5].date ? new Date(app.history[5].date) : null
+        );
+        setRejectedDate(
+          app.history[6].date ? new Date(app.history[6].date) : null
         );
         setNotes(app.notes);
       } catch (err) {
@@ -87,6 +114,15 @@ export default function EditApplicationForm() {
   // Edit Button OnClick Handler
   const editApp = async () => {
     try {
+      const history = createHistoryArray([
+        dateSubmitted,
+        onlineAssessment,
+        firstInterview,
+        secondInterview,
+        thirdInterview,
+        offerDate,
+        rejectedDate,
+      ]);
       const res = await fetch(`/apps/edit/${id}`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -95,6 +131,7 @@ export default function EditApplicationForm() {
           location,
           status,
           dateSubmitted,
+          history,
           notes,
         }),
         /*
@@ -251,114 +288,132 @@ export default function EditApplicationForm() {
         Milestones
       </Divider>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+      <Grid container>
+        <Grid item xs={12} md={9}>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6} lg={4}>
+                  <DatePicker
+                    label="Date Submitted"
+                    value={dateSubmitted}
+                    onChange={(newValue) => setDateSubmitted(newValue)}
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <DatePicker
+                    label="Online Assessment"
+                    value={onlineAssessment}
+                    onChange={(newValue) => setOnlineAssessment(newValue)}
+                    sx={{ width: '100%' }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <DatePicker
-                label="Date Submitted"
-                value={dateSubmitted}
-                onChange={(newValue) => setDateSubmitted(newValue)}
+                label="1st Interview"
+                value={firstInterview}
+                onChange={(newValue) => setFirstInterview(newValue)}
                 sx={{ width: '100%' }}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <DatePicker
-                label="Online Assessment"
-                value={dateSubmitted}
-                onChange={(newValue) => setDateSubmitted(newValue)}
+                label="2nd Interview"
+                value={secondInterview}
+                onChange={(newValue) => setSecondInterview(newValue)}
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <DatePicker
+                label="3nd Interview"
+                value={thirdInterview}
+                onChange={(newValue) => setThirdInterview(newValue)}
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <DatePicker
+                label="Offer Received"
+                value={offerDate}
+                onChange={(newValue) => setOfferDate(newValue)}
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <DatePicker
+                label="Rejected"
+                value={rejectedDate}
+                onChange={(newValue) => setRejectedDate(newValue)}
                 sx={{ width: '100%' }}
               />
             </Grid>
           </Grid>
+
+          {/* Notes */}
+          <Divider
+            textAlign="right"
+            sx={{ marginTop: 3, color: 'primary.main', fontSize: '1.2rem' }}
+          >
+            Notes
+          </Divider>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={12} lg={12}>
+              <TextField
+                label="Notes"
+                value={notes}
+                variant="outlined"
+                onChange={onNotesChange}
+                fullWidth
+                multiline
+                rows={4}
+              />
+            </Grid>
+          </Grid>
+
+          {/* Edit and Delete Buttons */}
+          <Stack direction="row" justifyContent="flex-end" marginTop="1rem">
+            <Box textAlign="center">
+              <Button
+                onClick={editApp}
+                variant="contained"
+                color="success"
+                sx={{ width: '30%' }}
+              >
+                Edit
+              </Button>
+            </Box>
+            <Box textAlign="center">
+              <Button
+                onClick={handleClickOpenDelete}
+                variant="contained"
+                color="error"
+                sx={{ width: '10%' }}
+              >
+                Delete
+              </Button>
+            </Box>
+          </Stack>
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="1st Interview"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="2nd Interview"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="3nd Interview"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="Offer Received"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <DatePicker
-            label="Rejected"
-            value={dateSubmitted}
-            onChange={(newValue) => setDateSubmitted(newValue)}
-            sx={{ width: '100%' }}
+
+        <Grid item xs={12} md={3}>
+          <Timeline
+            timeline={[
+              dateSubmitted,
+              onlineAssessment,
+              firstInterview,
+              secondInterview,
+              thirdInterview,
+              offerDate,
+              rejectedDate,
+            ]}
           />
         </Grid>
       </Grid>
-
-      {/* Notes */}
-      <Divider
-        textAlign="right"
-        sx={{ marginTop: 3, color: 'primary.main', fontSize: '1.2rem' }}
-      >
-        Notes
-      </Divider>
-
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={12} lg={12}>
-          <TextField
-            label="Notes"
-            value={notes}
-            variant="outlined"
-            onChange={onNotesChange}
-            fullWidth
-            multiline
-            rows={4}
-          />
-        </Grid>
-      </Grid>
-
-      {/* Edit and Delete Buttons */}
-      <Stack direction="row" justifyContent="flex-end" marginTop="1rem">
-        <Box textAlign="center">
-          <Button
-            onClick={editApp}
-            variant="contained"
-            color="success"
-            sx={{ width: '30%' }}
-          >
-            Edit
-          </Button>
-        </Box>
-        <Box textAlign="center">
-          <Button
-            onClick={handleClickOpenDelete}
-            variant="contained"
-            color="error"
-            sx={{ width: '10%' }}
-          >
-            Delete
-          </Button>
-        </Box>
-      </Stack>
 
       {/* Slide-in Alert at Bottom-Right Corner */}
       <Snackbar

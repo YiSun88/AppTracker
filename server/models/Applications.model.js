@@ -15,7 +15,6 @@ const activitySchema = new Schema({
   },
   date: {
     type: Date,
-    required: true,
   },
 });
 

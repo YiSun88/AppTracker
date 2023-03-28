@@ -84,7 +84,7 @@ function appsReducer(apps, action) {
             [newApps[i], newApps[i - 1]] = [newApps[i - 1], newApps[i]];
           } else break;
         }
-        console.log(newApps);
+
         return newApps;
       }
       return apps;
