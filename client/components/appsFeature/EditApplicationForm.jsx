@@ -25,7 +25,9 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAppsDispatch } from './AppsContext.jsx';
-import createHistoryArray from '../../constant/createHistoryArray';
+import createHistoryArray, {
+  createTimelineArray,
+} from '../../constant/createHistoryArray';
 import Timeline from './Timeline.jsx';
 
 const Alert = React.forwardRef((props, ref) => (
@@ -402,7 +404,7 @@ export default function EditApplicationForm() {
 
         <Grid item xs={12} md={3}>
           <Timeline
-            timeline={[
+            timeline={createTimelineArray([
               dateSubmitted,
               onlineAssessment,
               firstInterview,
@@ -410,7 +412,7 @@ export default function EditApplicationForm() {
               thirdInterview,
               offerDate,
               rejectedDate,
-            ]}
+            ])}
           />
         </Grid>
       </Grid>

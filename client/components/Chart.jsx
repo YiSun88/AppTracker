@@ -26,9 +26,14 @@ export default function BarChartByWeek() {
     `${format(subDays(today, 7 * index + delta), 'M/d')}`;
   const xAxisRange = 12;
 
+  /*
+   * Always ensure the calcWeekBoundary logic here and the later apps.forEach counting logic are aligned.
+   */
   const data = Array.from({ length: xAxisRange }, (el, i) => ({
-    week: `${calcWeekBoundary(xAxisRange - i, 0)} 
-          - ${calcWeekBoundary(xAxisRange - i - 1, 1)}`,
+    week: `${calcWeekBoundary(xAxisRange - i, -1)}-${calcWeekBoundary(
+      xAxisRange - i - 1,
+      0
+    )}`,
     amount: 0,
   }));
 

@@ -20,7 +20,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAppsDispatch } from './AppsContext.jsx';
 import Timeline from './Timeline.jsx';
-import createHistoryArray from '../../constant/createHistoryArray';
+import createHistoryArray, {
+  createTimelineArray,
+} from '../../constant/createHistoryArray';
 
 const Alert = React.forwardRef((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -304,7 +306,7 @@ export default function AddApplicationForm() {
 
         <Grid item xs={12} md={3}>
           <Timeline
-            timeline={[
+            timeline={createTimelineArray([
               dateSubmitted,
               onlineAssessment,
               firstInterview,
@@ -312,7 +314,7 @@ export default function AddApplicationForm() {
               thirdInterview,
               offerDate,
               rejectedDate,
-            ]}
+            ])}
           />
         </Grid>
       </Grid>
