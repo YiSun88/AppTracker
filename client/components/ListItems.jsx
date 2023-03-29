@@ -7,8 +7,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
-import SummarizeIcon from '@mui/icons-material/Summarize';
-import SearchIcon from '@mui/icons-material/Search';
+import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 
 import { Link } from 'react-router-dom';
 
@@ -22,7 +21,7 @@ export const mainListItems = (
     </ListItemButton>
     <ListItemButton component={Link} to="/applications">
       <ListItemIcon>
-        <SummarizeIcon />
+        <FolderCopyIcon />
       </ListItemIcon>
       <ListItemText primary="All Applications" />
     </ListItemButton>

@@ -89,7 +89,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Borders({ children }) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [dark, setDark] = React.useState(false);
 
   const changeDarkMode = (event) => {
@@ -173,8 +173,8 @@ export default function Borders({ children }) {
           <Divider />
           <List component="nav">
             {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+            {/* <Divider sx={{ my: 1 }} />
+            {secondaryListItems} */}
           </List>
         </Drawer>
         <Box

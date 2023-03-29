@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Paper, Divider } from '@mui/material';
-import Typography from '@mui/material/Typography';
+import { Grid, Divider } from '@mui/material';
+import BeenhereIcon from '@mui/icons-material/Beenhere';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import { format } from 'date-fns';
+import CabinIcon from '@mui/icons-material/Cabin';
 
-import Title from './Title.jsx';
-
+import DashboardCard from './DashboardCard.jsx';
 // function preventDefault(event) {
 //   event.preventDefault();
 // }
@@ -45,64 +48,29 @@ export default function Dashboard() {
 
       <Grid container spacing={3}>
         {/* Submitted So Far */}
-        <Grid item xs={12} md={4} lg={3}>
-          <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              height: 240,
-            }}
-          >
-            <Title>Applications Submitted</Title>
-            <Typography color="text.secondary" marginBottom="10px">
-              {`till today ${format(new Date(), 'MM/dd/yyyy')}`}
-            </Typography>
-            <Typography component="p" variant="h4">
-              {counts ? counts.submittedCount : ' '}
-            </Typography>
-          </Paper>
-        </Grid>
+
+        <DashboardCard
+          icon={<BeenhereIcon color="secondary" sx={{ fontSize: 60 }} />}
+          title="Applications Submitted"
+          date={`till today ${format(new Date(), 'MM/dd/yyyy')}`}
+          count={counts ? counts.submittedCount : ' '}
+        />
 
         {/* Interviews Received */}
-        <Grid item xs={12} md={4} lg={3}>
-          <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              height: 240,
-            }}
-          >
-            <Title>Interviews Scheduled</Title>
-            <Typography color="text.secondary" marginBottom="10px">
-              To attend
-            </Typography>
-            <Typography color="orange" component="p" variant="h4">
-              {counts ? counts.interviewCount : ' '}
-            </Typography>
-          </Paper>
-        </Grid>
+        <DashboardCard
+          icon={<DateRangeIcon color="warning" sx={{ fontSize: 60 }} />}
+          title="Interviews Scheduled"
+          date="To attend"
+          count={counts ? counts.interviewCount : ' '}
+        />
 
         {/* Offers Received */}
-        <Grid item xs={12} md={4} lg={3}>
-          <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              height: 240,
-            }}
-          >
-            <Title>Offers Received</Title>
-            <Typography color="text.secondary" marginBottom="10px">
-              till today
-            </Typography>
-            <Typography color="green" component="p" variant="h4">
-              {counts ? counts.offerCount : ' '}
-            </Typography>
-          </Paper>
-        </Grid>
+        <DashboardCard
+          icon={<ThumbUpAltIcon color="success" sx={{ fontSize: 60 }} />}
+          title="Offers Received"
+          date="till today"
+          count={counts ? counts.offerCount : ' '}
+        />
       </Grid>
 
       {/* Locations Dashboard Row */}
@@ -120,38 +88,22 @@ export default function Dashboard() {
 
       <Grid container spacing={3}>
         {/* 100% Remote Jobs */}
-        <Grid item xs={12} md={4} lg={3}>
-          <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              height: 240,
-            }}
-          >
-            <Title>100% Remote Jobs</Title>
-            <Typography component="p" variant="h4">
-              {counts ? counts.remoteCount : ' '}
-            </Typography>
-          </Paper>
-        </Grid>
+        <DashboardCard
+          icon={
+            <ConnectWithoutContactIcon color="action" sx={{ fontSize: 60 }} />
+          }
+          title="100% Remote Jobs"
+          date=""
+          count={counts ? counts.remoteCount : ' '}
+        />
 
         {/* Houston Jobs */}
-        <Grid item xs={12} md={4} lg={3}>
-          <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              height: 240,
-            }}
-          >
-            <Title>Houston Jobs</Title>
-            <Typography component="p" variant="h4">
-              {counts ? counts.houstonCount : ' '}
-            </Typography>
-          </Paper>
-        </Grid>
+        <DashboardCard
+          icon={<CabinIcon color="info" sx={{ fontSize: 60 }} />}
+          title="Houston Jobs"
+          date=""
+          count={counts ? counts.houstonCount : ' '}
+        />
       </Grid>
 
       {/* Bar Chart Insert Example */}
