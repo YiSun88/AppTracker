@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTheme, Grid, Paper } from '@mui/material';
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
-  Label,
+  Cell,
   ResponsiveContainer,
   BarChart,
   Tooltip,
@@ -16,6 +14,19 @@ import { format, subDays, differenceInCalendarDays } from 'date-fns';
 
 import Title from './Title.jsx';
 import { useApps } from './appsFeature/AppsContext.jsx';
+
+const getPath = (x, y, width, height) => `M${x},${y + height}C${
+  x + width / 3
+},${y + height} ${x + width / 2},${y + height / 100} 
+  ${x + width / 2}, ${y}
+  C${x + width / 2},${y + height / 200} ${x + (2 * width) / 3},${y + height} ${
+  x + width
+}, ${y + height}
+  Z`;
+
+function TriangleBar({ x, y, width, height }) {
+  return <path d={getPath(x, y, width, height)} stroke="none" fill="#8884d8" />;
+}
 
 export default function BarChartByWeek() {
   const theme = useTheme();
@@ -96,7 +107,17 @@ export default function BarChartByWeek() {
               allowDecimals={false}
             />
             <Tooltip />
-            <Bar dataKey="amount" fill={theme.palette.primary.main} />
+            <Bar
+              dataKey="amount"
+              fill={theme.palette.primary.main}
+              label={{
+                position: 'top',
+                fontWeight: 'bold',
+                fontSize: 24,
+                fill: '#8884d8',
+              }}
+              shape={<TriangleBar />}
+            />
           </BarChart>
         </ResponsiveContainer>
       </Paper>
