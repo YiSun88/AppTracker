@@ -53,6 +53,7 @@ module.exports = {
     historyApiFallback: true,
     proxy: {
       '/apps': 'http://localhost:3000',
+      '/auth': 'http://localhost:3000',
     },
   },
 };

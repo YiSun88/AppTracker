@@ -171,7 +171,7 @@ export default function EditApplicationForm() {
           payload: data,
         });
 
-        navigate('/applications');
+        navigate('/user/applications');
       }
     } catch (err) {
       setAlert({
@@ -211,7 +211,7 @@ export default function EditApplicationForm() {
           payload: { _id: deletedId },
         });
 
-        navigate('/applications');
+        navigate('/user/applications');
       }
     } catch (err) {
       setAlert({

@@ -14,13 +14,15 @@ connection.once('open', () => {
   console.log('MongoDB database connection established successfully');
 });
 
-const appsRouter = require('./routes/appsRoute');
-
 app.use(cors());
 app.use(express.json());
 
+const appsRouter = require('./routes/appsRoute');
+const authRouter = require('./routes/authRoute');
+
 app.use('/apps', appsRouter);
 
+app.use('/auth', authRouter);
 /*
  * To-Do: Add a 404 page backup route
  */

@@ -85,7 +85,8 @@ export default function BarChartByWeek() {
           p: 2,
           display: 'flex',
           flexDirection: 'column',
-          height: '60vh',
+          height: '80vh',
+          width: '70vw',
         }}
       >
         <Title>Applications Submitted per Week</Title>

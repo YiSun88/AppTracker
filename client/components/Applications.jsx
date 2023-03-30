@@ -167,7 +167,7 @@ export default function Applications() {
                     sx={{ minWidth: '24px', p: 0, m: 0 }}
                     color="warning"
                     component={Link}
-                    to={`/applications/edit/${app._id}`}
+                    to={`/user/applications/edit/${app._id}`}
                   >
                     <ModeEditOutlineOutlinedIcon />
                   </Button>
@@ -175,7 +175,7 @@ export default function Applications() {
                     sx={{ minWidth: '24px', p: 0, m: 0 }}
                     color="error"
                     component={Link}
-                    to={`/applications/edit/${app._id}`}
+                    to={`/user/applications/edit/${app._id}`}
                   >
                     <DeleteForeverOutlinedIcon />
                   </Button>

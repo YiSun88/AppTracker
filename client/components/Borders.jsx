@@ -17,30 +17,33 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Switch from '@mui/material/Switch';
+import { useNavigate } from 'react-router-dom';
 
 import { indigo } from '@mui/material/colors';
 import { mainListItems, secondaryListItems } from './ListItems.jsx';
+import { useAuth } from './signinFeature/AuthContext.jsx';
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      <Link
-        color="inherit"
-        href="https://www.linkedin.com/in/yi-sun-p-e-abb0a239/"
-      >
-        Job Applications Tracker
-      </Link>{' '}
-      {new Date().getFullYear()}.
-    </Typography>
-  );
-}
+// function Copyright(props) {
+//   return (
+//     <Typography
+//       variant="body2"
+//       color="text.secondary"
+//       align="center"
+//       {...props}
+//     >
+//       {'Copyright © '}
+//       <Link
+//         color="inherit"
+//         href="https://www.linkedin.com/in/yi-sun-p-e-abb0a239/"
+//       >
+//         Job Applications Tracker
+//       </Link>{' '}
+//       {new Date().getFullYear()}.
+//     </Typography>
+//   );
+// }
 
 const drawerWidth = 240;
 
@@ -91,6 +94,9 @@ const Drawer = styled(MuiDrawer, {
 export default function Borders({ children }) {
   const [open, setOpen] = React.useState(false);
   const [dark, setDark] = React.useState(false);
+
+  const { signout } = useAuth();
+  const navigate = useNavigate();
 
   const changeDarkMode = (event) => {
     setDark(event.target.checked);
@@ -148,12 +154,24 @@ export default function Borders({ children }) {
             <Switch
               checked={dark}
               onChange={changeDarkMode}
-              sx={{ marginRight: '12px' }}
+              sx={{ marginRight: '6px' }}
             />
             <IconButton color="inherit">
               <Badge badgeContent={0} color="secondary">
                 <NotificationsIcon />
               </Badge>
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={() => {
+                signout();
+                navigate('/');
+              }}
+              sx={{
+                marginLeft: '6px',
+              }}
+            >
+              <ExitToAppIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -192,14 +210,10 @@ export default function Borders({ children }) {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             {children}
-            <Copyright sx={{ pt: 4 }} />
+            {/* <Copyright sx={{ pt: 4 }} /> */}
           </Container>
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
-
-// export default function Dashboard() {
-//   return <DashboardContent />;
-// }

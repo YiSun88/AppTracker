@@ -10,40 +10,63 @@ import { AppsProvider } from './components/appsFeature/AppsContext.jsx';
 import AddApplicationForm from './components/appsFeature/AddApplicationForm.jsx';
 import EditApplicationForm from './components/appsFeature/EditApplicationForm.jsx';
 import BarChart from './components/Chart.jsx';
+import SignInSide from './components/signinFeature/Signin.jsx';
+import {
+  AuthProvider,
+  RequireAuth,
+} from './components/signinFeature/AuthContext.jsx';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <AppsProvider>
-          {/* LocalizationProvider supports the date picker component */}
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Borders>
-              <Routes>
-                {/* Dashboard */}
-                <Route path="/" element={<Dashboard />} />
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<SignInSide />} />
+            <Route
+              path="/user/*"
+              element={
+                <RequireAuth>
+                  <AppsProvider>
+                    {/* LocalizationProvider supports the date picker component */}
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <Borders>
+                        <Routes>
+                          {/* Dashboard */}
+                          <Route path="/" element={<Dashboard />} />
 
-                {/* All Application Table */}
-                <Route path="/applications" element={<Applications />} />
+                          {/* All Application Table */}
+                          <Route
+                            path="/applications"
+                            element={<Applications />}
+                          />
 
-                {/* Add Application Form */}
-                <Route
-                  path="/applications/add"
-                  element={<AddApplicationForm />}
-                />
+                          {/* Add Application Form */}
+                          <Route
+                            path="/applications/add"
+                            element={<AddApplicationForm />}
+                          />
 
-                {/* Edit an Application */}
-                <Route
-                  path="/applications/edit/:id"
-                  element={<EditApplicationForm />}
-                />
+                          {/* Edit an Application */}
+                          <Route
+                            path="/applications/edit/:id"
+                            element={<EditApplicationForm />}
+                          />
 
-                {/* Submittal by Week Bar Chart */}
-                <Route path="/submittalbyweek" element={<BarChart />} />
-              </Routes>
-            </Borders>
-          </LocalizationProvider>
-        </AppsProvider>
+                          {/* Submittal by Week Bar Chart */}
+                          <Route
+                            path="/submittalbyweek"
+                            element={<BarChart />}
+                          />
+                        </Routes>
+                      </Borders>
+                    </LocalizationProvider>
+                  </AppsProvider>
+                </RequireAuth>
+              }
+            />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </div>
   );

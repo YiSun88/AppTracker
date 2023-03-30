@@ -122,7 +122,7 @@ export default function AddApplicationForm() {
           payload: data,
         });
 
-        navigate('/applications');
+        navigate('/user/applications');
       }
     } catch (err) {
       setAlert({
