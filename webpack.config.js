@@ -5,6 +5,8 @@ module.exports = {
   mode: process.env.NODE_ENV,
   entry: './client/index.js',
   output: {
+    // The '/' at the end is required for generate correct URLs for the assts like font files
+    publicPath: '/dist/',
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
   },
@@ -34,6 +36,14 @@ module.exports = {
           // Compiles Sass to CSS
           // 'sass-loader',
         ],
+      },
+      // Asset Modules setup to store font files separately in the font subdirectory
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'font/[hash][ext][query]',
+        },
       },
     ],
   },

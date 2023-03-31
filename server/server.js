@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -23,8 +24,18 @@ const appsRouter = require('./routes/appsRoute');
 const authRouter = require('./routes/authRoute');
 
 app.use('/apps', appsRouter);
-
 app.use('/auth', authRouter);
+
+// statically serve everything in the dist folder on the route '/dist'
+app.use('/dist', express.static(path.join(__dirname, '../dist/')));
+
+// serve index.html on the route '/'.
+// The '/*' is to make sure refresh in browser works with frontend routing (https://ui.dev/react-router-cannot-get-url-refresh)
+if (process.env.NODE_ENV === 'production') {
+  app.get('/*', (req, res) =>
+    res.status(200).sendFile(path.join(__dirname, '../dist/index.html'))
+  );
+}
 /*
  * To-Do: Add a 404 page backup route
  */
