@@ -13,6 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
+import ListSubheader from '@mui/material/ListSubheader';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -95,7 +96,7 @@ export default function Borders({ children }) {
   const [open, setOpen] = React.useState(false);
   const [dark, setDark] = React.useState(false);
 
-  const { signout } = useAuth();
+  const { user, signout } = useAuth();
   const navigate = useNavigate();
 
   const changeDarkMode = (event) => {
@@ -190,6 +191,17 @@ export default function Borders({ children }) {
           </Toolbar>
           <Divider />
           <List component="nav">
+            <ListSubheader
+              component="div"
+              inset
+              color="inherit"
+              sx={{ fontSize: 18, lineHeight: '1.2' }}
+            >
+              Welcome back,
+              <br />
+              {user || ''}
+            </ListSubheader>
+            <Divider sx={{ my: 1 }} />
             {mainListItems}
             {/* <Divider sx={{ my: 1 }} />
             {secondaryListItems} */}

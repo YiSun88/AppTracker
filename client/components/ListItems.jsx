@@ -40,6 +40,7 @@ export const mainListItems = (
   </>
 );
 
+// Not used, from MUI template
 export const secondaryListItems = (
   <>
     <ListSubheader component="div" inset>

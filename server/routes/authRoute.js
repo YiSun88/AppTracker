@@ -1,6 +1,11 @@
 const router = require('express').Router();
 const authController = require('../controllers/authController');
 
+// User sign up
+router.post('/signup', authController.createUser, (req, res, next) =>
+  res.status(200).json('Account created successfully')
+);
+
 // User log in
 router.post(
   '/login',
@@ -18,9 +23,9 @@ router.post(
   }
 );
 
-// User sign up
-router.post('/signup', authController.createUser, (req, res, next) =>
-  res.status(200).json('Account created successfully')
+// User log out
+router.delete('/logout', (req, res, next) =>
+  res.clearCookie('access_token').status(200).json('Sign out successfully')
 );
 
 module.exports = router;

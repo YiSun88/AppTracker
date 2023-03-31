@@ -81,6 +81,4 @@ authController.verifyJWT = (req, res, next) => {
   }
 };
 
-// Log out and clear the cookie
-
 module.exports = authController;
