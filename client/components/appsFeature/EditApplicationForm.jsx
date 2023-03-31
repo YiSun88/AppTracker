@@ -67,7 +67,6 @@ export default function EditApplicationForm() {
         const app = await (
           await fetch(`/apps/${id}`, { method: 'GET' })
         ).json();
-        console.log(app);
         setCompany(app.company);
         setPosition(app.position);
         setLocation(app.location);
@@ -95,7 +94,9 @@ export default function EditApplicationForm() {
         );
         setNotes(app.notes);
       } catch (err) {
-        console.log('Error when fetching this application from Backend.');
+        console.log(
+          `Error when fetching this application from Backend. ${err}`
+        );
       }
     };
     fetchAnApp();

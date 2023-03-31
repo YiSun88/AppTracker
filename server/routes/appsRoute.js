@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const async = require('async');
+const authController = require('../controllers/authController');
 
 const Application = require('../models/Applications.model');
 
 // Get all applications for the Frontend table
-router.get('/', async (req, res, next) => {
+router.get('/', authController.verifyJWT, async (req, res, next) => {
   try {
     const apps = await Application.find();
     const MAXDATE = 10 ** 15;
@@ -26,7 +27,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // Get all statistic counts
-router.get('/counts', async (req, res, next) => {
+router.get('/counts', authController.verifyJWT, async (req, res, next) => {
   try {
     /*
      * To-Do: refactor to aggregate MongoDB query(iterate through the Collection only once to get all counts) to further optimize performance.
@@ -81,35 +82,39 @@ router.get('/counts', async (req, res, next) => {
 });
 
 // Get counts by months
-router.get('/counts/months', async (req, res, next) => {
-  try {
-    const countByMonth = await Application.aggregate([
-      {
-        $group: {
-          _id: {
-            year: { $year: '$dateSubmitted' },
-            month: { $month: '$dateSubmitted' },
-          },
-          count: {
-            $sum: 1,
+router.get(
+  '/counts/months',
+  authController.verifyJWT,
+  async (req, res, next) => {
+    try {
+      const countByMonth = await Application.aggregate([
+        {
+          $group: {
+            _id: {
+              year: { $year: '$dateSubmitted' },
+              month: { $month: '$dateSubmitted' },
+            },
+            count: {
+              $sum: 1,
+            },
           },
         },
-      },
-    ]);
-    res.status(200).json(countByMonth);
-  } catch (err) {
-    next({
-      log: `Error encountered in application get "/counts/months" route, ${err}`,
-      status: 500,
-      message: {
-        err: 'An error occurred when getting the applicaiton counts by months.',
-      },
-    });
+      ]);
+      res.status(200).json(countByMonth);
+    } catch (err) {
+      next({
+        log: `Error encountered in application get "/counts/months" route, ${err}`,
+        status: 500,
+        message: {
+          err: 'An error occurred when getting the applicaiton counts by months.',
+        },
+      });
+    }
   }
-});
+);
 
 // Add a new job application
-router.post('/add', (req, res, next) => {
+router.post('/add', authController.verifyJWT, (req, res, next) => {
   const { company, position, location, status, dateSubmitted, history, notes } =
     req.body;
 
@@ -151,7 +156,7 @@ router.post('/add', (req, res, next) => {
 });
 
 // Edit an existing job application
-router.put('/edit/:id', async (req, res, next) => {
+router.put('/edit/:id', authController.verifyJWT, async (req, res, next) => {
   const { id } = req.params;
   const { company, position, location, status, dateSubmitted, history, notes } =
     req.body;
@@ -183,7 +188,7 @@ router.put('/edit/:id', async (req, res, next) => {
 });
 
 // Get an existing application
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', authController.verifyJWT, async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -201,29 +206,34 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Delete an existing job application
-router.delete('/delete/:id', async (req, res, next) => {
-  const { id } = req.params;
-  try {
-    const deletedApp = await Application.findByIdAndDelete(id);
-    if (!deletedApp) {
+router.delete(
+  '/delete/:id',
+  authController.verifyJWT,
+  authController.verifyJWT,
+  async (req, res, next) => {
+    const { id } = req.params;
+    try {
+      const deletedApp = await Application.findByIdAndDelete(id);
+      if (!deletedApp) {
+        return next({
+          log: `Error encountered in application delete "/delete/:id" route, document with the specific id was not found in database`,
+          status: 500,
+          message: {
+            err: 'An error occurred when deleting the application. Document with the specific id was not found in database',
+          },
+        });
+      }
+      return res.status(200).json(deletedApp._id);
+    } catch (err) {
       return next({
-        log: `Error encountered in application delete "/delete/:id" route, document with the specific id was not found in database`,
+        log: `Error encountered in application delete "/delete/:id" route, ${err}`,
         status: 500,
         message: {
-          err: 'An error occurred when deleting the application. Document with the specific id was not found in database',
+          err: 'An error occurred when deleting the application.',
         },
       });
     }
-    return res.status(200).json(deletedApp._id);
-  } catch (err) {
-    return next({
-      log: `Error encountered in application delete "/delete/:id" route, ${err}`,
-      status: 500,
-      message: {
-        err: 'An error occurred when deleting the application.',
-      },
-    });
   }
-});
+);
 
 module.exports = router;

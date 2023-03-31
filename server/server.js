@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 
@@ -16,6 +17,7 @@ connection.once('open', () => {
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 const appsRouter = require('./routes/appsRoute');
 const authRouter = require('./routes/authRoute');

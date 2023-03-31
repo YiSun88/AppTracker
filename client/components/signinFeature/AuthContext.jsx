@@ -21,8 +21,12 @@ export function AuthProvider({ children }) {
       },
     });
     const signedInUser = await res.json();
-    setUser(signedInUser);
-    return signedInUser;
+    if (!res.ok) {
+      setUser(null);
+    } else {
+      setUser(signedInUser.username);
+    }
+    return signedInUser.username;
   };
 
   const signout = () => {
