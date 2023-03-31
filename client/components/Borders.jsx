@@ -25,6 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import { indigo } from '@mui/material/colors';
 import { mainListItems, secondaryListItems } from './ListItems.jsx';
 import { useAuth } from './signinFeature/AuthContext.jsx';
+import Notification from './notificationFeature/Notification.jsx';
 
 // function Copyright(props) {
 //   return (
@@ -157,11 +158,12 @@ export default function Borders({ children }) {
               onChange={changeDarkMode}
               sx={{ marginRight: '6px' }}
             />
-            <IconButton color="inherit">
+            {/* <IconButton color="inherit">
               <Badge badgeContent={0} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
+            <Notification />
             <IconButton
               color="inherit"
               onClick={() => {
@@ -169,7 +171,7 @@ export default function Borders({ children }) {
                 navigate('/');
               }}
               sx={{
-                marginLeft: '6px',
+                marginLeft: '10px',
               }}
             >
               <ExitToAppIcon />

@@ -5,8 +5,8 @@ module.exports = {
   mode: process.env.NODE_ENV,
   entry: './client/index.js',
   output: {
-    // The '/' at the end is required for generate correct URLs for the assts like font files
-    publicPath: '/dist/',
+    // The '/' at the end is required for generate correct URLs for the assts like font files during production
+    publicPath: process.env.NODE_ENV === 'production' ? '/dist/' : '',
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
   },

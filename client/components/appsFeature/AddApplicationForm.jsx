@@ -109,14 +109,6 @@ export default function AddApplicationForm() {
           message: 'Application added successfully',
         });
         // dispatch (need to get the _id of added application)
-        data.dateSubmitted = data.dateSubmitted
-          ? new Date(data.dateSubmitted)
-          : data.dateSubmitted;
-        data.history.forEach((el) => {
-          if (el.date) {
-            el.date = new Date(el.date);
-          }
-        });
         dispatch({
           type: 'add',
           payload: data,

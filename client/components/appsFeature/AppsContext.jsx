@@ -1,9 +1,37 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { differenceInCalendarDays } from 'date-fns';
 
 const AppsContext = createContext(null);
 const AppsDispatchContext = createContext(null);
+
+const MAXDATE = 10 ** 15;
+const TODAY = new Date();
+
+/*
+ * Convert the json object strings back to Date objects;
+ * Also add a new property for each app in the global context, to record all future activities within next 7 days;
+ * TO-DO: make this function pure/ not mutating the input object
+ */
+const convertStrToDateObj = (data) => {
+  data.dateSubmitted = data.dateSubmitted
+    ? new Date(data.dateSubmitted)
+    : data.dateSubmitted;
+  data.history.forEach((el) => {
+    if (el.date) {
+      el.date = new Date(el.date);
+      if (
+        (!data.nextEvent ||
+          differenceInCalendarDays(data.nextEvent, el.date) > 0) &&
+        differenceInCalendarDays(el.date, TODAY) <= 7 &&
+        differenceInCalendarDays(el.date, TODAY) >= 0
+      ) {
+        data.nextEvent = { ...el };
+      }
+    }
+  });
+};
 
 export function AppsProvider({ children }) {
   const [apps, dispatch] = useReducer(appsReducer, []);
@@ -23,15 +51,9 @@ export function AppsProvider({ children }) {
            * Not True --> (Keep the dates in frontend context as string, to avoid large amount converting after the first fetch request. Instead, only do converting when certain dates are requried to be rendered.)
            */
           data.forEach((element) => {
-            if (element.dateSubmitted) {
-              element.dateSubmitted = new Date(element.dateSubmitted);
-            }
-            element.history.forEach((el) => {
-              if (el.date) {
-                el.date = new Date(el.date);
-              }
-            });
+            convertStrToDateObj(element);
           });
+
           dispatch({
             type: 'initialize',
             payload: data,
@@ -69,10 +91,11 @@ function appsReducer(apps, action) {
     }
     case 'add': {
       if (apps.findIndex((app) => app._id === action.payload._id) === -1) {
+        convertStrToDateObj(action.payload);
         const newApps = [...apps, action.payload];
 
         // Sort the newly added applicaiton in the previously sorted array.
-        const MAXDATE = 10 ** 15;
+
         for (let i = newApps.length - 1; i >= 1; i -= 1) {
           if (
             (newApps[i].dateSubmitted ? newApps[i].dateSubmitted : MAXDATE) -
@@ -90,12 +113,19 @@ function appsReducer(apps, action) {
       return apps;
     }
     case 'edit': {
-      return apps.map((app) => {
-        if (app._id === action.payload._id) {
-          return action.payload;
-        }
-        return app;
-      });
+      return apps
+        .map((app) => {
+          if (app._id === action.payload._id) {
+            convertStrToDateObj(action.payload);
+            return action.payload;
+          }
+          return app;
+        })
+        .sort(
+          (a, b) =>
+            (b.dateSubmitted ? b.dateSubmitted : MAXDATE) -
+            (a.dateSubmitted ? a.dateSubmitted : MAXDATE)
+        );
     }
     case 'delete': {
       return apps.filter((app) => app._id !== action.payload._id);

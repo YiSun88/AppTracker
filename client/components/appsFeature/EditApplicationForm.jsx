@@ -100,7 +100,7 @@ export default function EditApplicationForm() {
       }
     };
     fetchAnApp();
-  }, []);
+  }, [id]);
 
   const dispatch = useAppsDispatch();
 
@@ -158,14 +158,6 @@ export default function EditApplicationForm() {
           message: 'Application edited successfully',
         });
         // dispatch (need to get the _id of added application), therefore add what is returned from Backend, not simply the states in Frontend
-        data.dateSubmitted = data.dateSubmitted
-          ? new Date(data.dateSubmitted)
-          : data.dateSubmitted;
-        data.history.forEach((el) => {
-          if (el.date) {
-            el.date = new Date(el.date);
-          }
-        });
 
         dispatch({
           type: 'edit',

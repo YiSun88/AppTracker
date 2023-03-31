@@ -10,6 +10,22 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 
 import format from 'date-fns/format';
 import isValid from 'date-fns/isValid';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
+
+const TODAY = new Date();
+
+const calcColor = (actObj, isDot = false) => {
+  if (actObj.activity === 'Offer Received') {
+    return isDot ? 'success' : 'green';
+  }
+  if (actObj.activity === 'Rejected') {
+    return isDot ? 'warning' : 'red';
+  }
+  if (differenceInCalendarDays(actObj.date, TODAY) >= 0) {
+    return isDot ? 'secondary' : 'purple';
+  }
+  return 'grey';
+};
 
 export default function BasicTimeline({ timeline }) {
   const filteredTimeline = timeline.filter((el) => isValid(el.date));
@@ -19,40 +35,18 @@ export default function BasicTimeline({ timeline }) {
         <TimelineItem key={act.activity}>
           <TimelineOppositeContent
             color="text.secondary"
-            sx={
-              act.activity === 'Offer Received'
-                ? { color: 'green' }
-                : act.activity === 'Rejected'
-                ? { color: 'red' }
-                : {}
-            }
+            sx={{ color: calcColor(act) }}
           >
             {format(act.date, 'MM/dd')}
           </TimelineOppositeContent>
           <TimelineSeparator>
-            <TimelineDot
-              color={
-                act.activity === 'Offer Received'
-                  ? 'success'
-                  : act.activity === 'Rejected'
-                  ? 'warning'
-                  : 'grey'
-              }
-            />
+            <TimelineDot color={calcColor(act, true)} />
             {act.activity === 'Offer Received' ||
             act.activity === 'Rejected' ? null : (
               <TimelineConnector />
             )}
           </TimelineSeparator>
-          <TimelineContent
-            sx={
-              act.activity === 'Offer Received'
-                ? { color: 'green' }
-                : act.activity === 'Rejected'
-                ? { color: 'red' }
-                : {}
-            }
-          >
+          <TimelineContent sx={{ color: calcColor(act) }}>
             {act.activity}
           </TimelineContent>
         </TimelineItem>
