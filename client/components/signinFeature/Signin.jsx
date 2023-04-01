@@ -108,6 +108,7 @@ export default function SignIn() {
               name="username"
               autoComplete="username"
               autoFocus
+              sx={{ backgroundColor: '#FFFFFF' }}
             />
             <TextField
               margin="normal"
@@ -118,6 +119,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              sx={{ backgroundColor: '#FFFFFF' }}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

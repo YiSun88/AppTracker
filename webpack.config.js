@@ -27,14 +27,8 @@ module.exports = {
         use: [
           // Creates `style` nodes from JS strings
           'style-loader',
-
-          // Create separate CSS files in production
-          // MiniCssExtractPlugin.loader,
-
           // Translates CSS into CommonJS
           'css-loader',
-          // Compiles Sass to CSS
-          // 'sass-loader',
         ],
       },
       // Asset Modules setup to store font files separately in the font subdirectory
@@ -44,6 +38,25 @@ module.exports = {
         generator: {
           filename: 'font/[hash][ext][query]',
         },
+      },
+      // Asset Modules setup for .jpg images
+      {
+        test: /\.jpg$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'image/[hash][ext][query]',
+        },
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          'style-loader',
+          // Translates CSS into CommonJS
+          'css-loader',
+          // Compiles Sass to CSS
+          'sass-loader',
+        ],
       },
     ],
   },

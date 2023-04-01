@@ -131,7 +131,14 @@ export default function AddApplicationForm() {
   };
 
   return (
-    <Paper sx={{ p: 2, pl: 6, display: 'flex', flexDirection: 'column' }}>
+    <Paper
+      sx={{
+        p: 2,
+        pl: 6,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Grid container spacing={2}>
         <Grid item xs={12} md={12} lg={12}>
           <TextField
