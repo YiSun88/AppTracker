@@ -60,7 +60,7 @@ export default function Dashboard() {
         <DashboardCard
           icon={<DateRangeIcon color="warning" sx={{ fontSize: 60 }} />}
           title="Interviews Scheduled"
-          date="To attend"
+          date="On-going"
           count={counts ? counts.interviewCount : ' '}
         />
 

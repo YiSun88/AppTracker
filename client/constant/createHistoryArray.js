@@ -18,14 +18,14 @@ const timelineActivities = [
   'Rejected',
 ];
 
-export default function createHistoryArray(dates) {
-  return activities.map((activity, i) => ({
-    activity,
-    date: dates[i],
-  }));
-}
+// export function createHistoryArray(dates) {
+//   return activities.map((activity, i) => ({
+//     activity,
+//     date: dates[i],
+//   }));
+// }
 
-export function createTimelineArray(dates) {
+export default function createTimelineArray(dates) {
   return timelineActivities.map((activity, i) => ({
     activity,
     date: dates[i],

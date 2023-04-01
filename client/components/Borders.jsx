@@ -16,6 +16,7 @@ import Link from '@mui/material/Link';
 import ListSubheader from '@mui/material/ListSubheader';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import Tooltip from '@mui/material/Tooltip';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -23,7 +24,8 @@ import Switch from '@mui/material/Switch';
 import { useNavigate } from 'react-router-dom';
 
 import { indigo } from '@mui/material/colors';
-import { mainListItems, secondaryListItems } from './ListItems.jsx';
+import mainListItems from './ListItems.jsx';
+import UpcomingEvents from './notificationFeature/UpcomingEvents.jsx';
 import { useAuth } from './signinFeature/AuthContext.jsx';
 import Notification from './notificationFeature/Notification.jsx';
 
@@ -94,7 +96,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Borders({ children }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [dark, setDark] = React.useState(false);
 
   const { user, signout } = useAuth();
@@ -143,6 +145,8 @@ export default function Borders({ children }) {
             >
               <MenuIcon />
             </IconButton>
+
+            {/* Header: App Title */}
             <Typography
               component="h1"
               variant="h6"
@@ -152,30 +156,35 @@ export default function Borders({ children }) {
             >
               Job Applications Tracker
             </Typography>
+
+            {/* Switch for Light/Dark Modes */}
             <Brightness4Icon />
-            <Switch
-              checked={dark}
-              onChange={changeDarkMode}
-              sx={{ marginRight: '6px' }}
-            />
-            {/* <IconButton color="inherit">
-              <Badge badgeContent={0} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
+            <Tooltip title="Light/Dark Mode">
+              <Switch
+                checked={dark}
+                onChange={changeDarkMode}
+                sx={{ marginRight: '6px' }}
+              />
+            </Tooltip>
+
+            {/* Notification for events within a week */}
             <Notification />
-            <IconButton
-              color="inherit"
-              onClick={() => {
-                signout();
-                navigate('/');
-              }}
-              sx={{
-                marginLeft: '10px',
-              }}
-            >
-              <ExitToAppIcon />
-            </IconButton>
+
+            {/* Logout button */}
+            <Tooltip title="Logout">
+              <IconButton
+                color="inherit"
+                onClick={() => {
+                  signout();
+                  navigate('/');
+                }}
+                sx={{
+                  marginLeft: '10px',
+                }}
+              >
+                <ExitToAppIcon />
+              </IconButton>
+            </Tooltip>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -205,8 +214,10 @@ export default function Borders({ children }) {
             </ListSubheader>
             <Divider sx={{ my: 1 }} />
             {mainListItems}
-            {/* <Divider sx={{ my: 1 }} />
-            {secondaryListItems} */}
+            <Divider sx={{ my: 1 }} />
+
+            {/* The upcoming events list */}
+            <UpcomingEvents />
           </List>
         </Drawer>
         <Box

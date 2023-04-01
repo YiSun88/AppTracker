@@ -22,12 +22,11 @@ import {
 import MuiAlert from '@mui/material/Alert';
 import React, { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAppsDispatch } from './AppsContext.jsx';
-import createHistoryArray, {
-  createTimelineArray,
-} from '../../constant/createHistoryArray';
+import createTimelineArray from '../../constant/createHistoryArray';
 import Timeline from './Timeline.jsx';
 
 const Alert = React.forwardRef((props, ref) => (
@@ -122,7 +121,7 @@ export default function EditApplicationForm() {
   const editApp = async () => {
     try {
       // Create the history array with each milestone date, to be saved as one property in the app obj in database
-      const history = createHistoryArray([
+      const history = createTimelineArray([
         dateSubmitted,
         onlineAssessment,
         firstInterview,
@@ -302,7 +301,7 @@ export default function EditApplicationForm() {
                   />
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
-                  <DatePicker
+                  <DateTimePicker
                     label="Online Assessment"
                     value={onlineAssessment}
                     onChange={(newValue) => setOnlineAssessment(newValue)}
@@ -312,7 +311,7 @@ export default function EditApplicationForm() {
               </Grid>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <DatePicker
+              <DateTimePicker
                 label="1st Interview"
                 value={firstInterview}
                 onChange={(newValue) => setFirstInterview(newValue)}
@@ -320,7 +319,7 @@ export default function EditApplicationForm() {
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <DatePicker
+              <DateTimePicker
                 label="2nd Interview"
                 value={secondInterview}
                 onChange={(newValue) => setSecondInterview(newValue)}
@@ -328,7 +327,7 @@ export default function EditApplicationForm() {
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <DatePicker
+              <DateTimePicker
                 label="3nd Interview"
                 value={thirdInterview}
                 onChange={(newValue) => setThirdInterview(newValue)}

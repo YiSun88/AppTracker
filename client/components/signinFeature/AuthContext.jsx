@@ -72,9 +72,9 @@ export function RequireAuth({ children }) {
 
   <Navigate/> will ensure redirect happen right away.
   */
-  if (!auth.user) {
-    return <Navigate to="/" />;
-  }
+  // if (!auth.user) {
+  //   return <Navigate to="/" />;
+  // }
 
   return children;
 }

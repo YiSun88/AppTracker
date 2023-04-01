@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -6,15 +6,19 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import LabelTwoToneIcon from '@mui/icons-material/LabelTwoTone';
+import Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
+import { format, differenceInCalendarDays } from 'date-fns';
 
-import { useApps } from '../appsFeature/AppsContext.jsx';
+import { useFutureEvents } from '../appsFeature/AppsContext.jsx';
+
+const TODAY = new Date();
 
 export default function Notification() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const apps = useApps();
-  const [withinAWeek, setWithinAWeek] = useState([]);
+  const withinAWeek = useFutureEvents().filter(
+    (app) => differenceInCalendarDays(app.nextEvent.date, TODAY) <= 7
+  );
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -24,21 +28,15 @@ export default function Notification() {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    setWithinAWeek(
-      apps
-        .filter((app) => app.nextEvent)
-        .sort((a, b) => a.nextEvent.date - b.nextEvent.date)
-    );
-  }, [apps]);
-
   return (
     <>
-      <IconButton color="inherit" onClick={handleClick}>
-        <Badge badgeContent={withinAWeek.length} color="secondary">
-          <NotificationsIcon />
-        </Badge>
-      </IconButton>
+      <Tooltip title="In 7 Days">
+        <IconButton color="inherit" onClick={handleClick}>
+          <Badge badgeContent={withinAWeek.length} color="secondary">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -86,7 +84,7 @@ export default function Notification() {
             </ListItemIcon>
             {`${app.company} - ${app.nextEvent.activity} - ${format(
               app.nextEvent.date,
-              'MM/dd'
+              'MMM-dd'
             )}`}
           </MenuItem>
         ))}

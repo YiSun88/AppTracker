@@ -41,6 +41,10 @@ router.get('/counts', authController.verifyJWT, async (req, res, next) => {
         return submittedCount;
       },
 
+      /*
+      * To-Do: this query is currently counting for all applications with the status 'Interview Scheduled',
+      this can be more than just the future interviews to attend
+      */
       interviewCount: async () => {
         const interviewCount = await Application.countDocuments({
           status: 'Interview Scheduled',

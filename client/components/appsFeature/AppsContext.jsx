@@ -1,10 +1,17 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useState,
+} from 'react';
 import { differenceInCalendarDays } from 'date-fns';
 
 const AppsContext = createContext(null);
 const AppsDispatchContext = createContext(null);
+const FutureEventsContext = createContext(null);
 
 const MAXDATE = 10 ** 15;
 const TODAY = new Date();
@@ -24,7 +31,6 @@ const convertStrToDateObj = (data) => {
       if (
         (!data.nextEvent ||
           differenceInCalendarDays(data.nextEvent, el.date) > 0) &&
-        differenceInCalendarDays(el.date, TODAY) <= 7 &&
         differenceInCalendarDays(el.date, TODAY) >= 0
       ) {
         data.nextEvent = { ...el };
@@ -35,6 +41,7 @@ const convertStrToDateObj = (data) => {
 
 export function AppsProvider({ children }) {
   const [apps, dispatch] = useReducer(appsReducer, []);
+  const [futureEvents, setFutureEvents] = useState([]);
 
   /*
    * useState hook here for loading status is not working, since setStatus may
@@ -65,11 +72,21 @@ export function AppsProvider({ children }) {
       });
   }, []);
 
+  useEffect(() => {
+    setFutureEvents(
+      apps
+        .filter((app) => app.nextEvent)
+        .sort((a, b) => a.nextEvent.date - b.nextEvent.date)
+    );
+  }, [apps]);
+
   return (
     // Provide apps and dispatch in separated Provider components, per React offical examples. This will avoid nested object as context value and associated complexity of keeping that nested object immutable
     <AppsContext.Provider value={apps}>
       <AppsDispatchContext.Provider value={dispatch}>
-        {children}
+        <FutureEventsContext.Provider value={futureEvents}>
+          {children}
+        </FutureEventsContext.Provider>
       </AppsDispatchContext.Provider>
     </AppsContext.Provider>
   );
@@ -81,6 +98,10 @@ export function useApps() {
 }
 export function useAppsDispatch() {
   return useContext(AppsDispatchContext);
+}
+
+export function useFutureEvents() {
+  return useContext(FutureEventsContext);
 }
 
 // Similar to Redux, should be pure
