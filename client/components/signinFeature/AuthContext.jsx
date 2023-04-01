@@ -1,4 +1,10 @@
-import React, { useState, useContext, createContext, useMemo } from 'react';
+import React, {
+  useState,
+  useContext,
+  createContext,
+  useMemo,
+  useCallback,
+} from 'react';
 import { Navigate } from 'react-router-dom';
 
 const AuthContext = createContext(null);
@@ -8,7 +14,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   // Signin event handler to be passed to children component with the signin button
-  const signin = async (username, password) => {
+  const signin = useCallback(async (username, password) => {
     const res = await fetch('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
@@ -23,18 +29,18 @@ export function AuthProvider({ children }) {
     } else {
       setUser(signedInUser.username);
     }
-    return signedInUser.username;
-  };
+    return signedInUser;
+  }, []);
 
   // Signout event handler to be passed to children component with the signout button
-  const signout = async () => {
+  const signout = useCallback(async () => {
     await fetch('auth/logout', {
       method: 'DELETE',
     });
     setUser(null);
-  };
+  }, []);
 
-  // Optimize the React re-rendering to avoid new value object and re-rendering every time.
+  // Optimize the React re-rendering to avoid new value object and re-rendering every time. Similarly, utilize useCallback for signin and signout functions.
   const value = useMemo(
     () => ({ user, signin, signout }),
     [user, signin, signout]
@@ -66,9 +72,9 @@ export function RequireAuth({ children }) {
 
   <Navigate/> will ensure redirect happen right away.
   */
-  // if (!auth.user) {
-  //   return <Navigate to="/" />;
-  // }
+  if (!auth.user) {
+    return <Navigate to="/" />;
+  }
 
   return children;
 }

@@ -43,31 +43,30 @@ export function AppsProvider({ children }) {
   // const [status, setStatus] = useState('idle');
 
   useEffect(() => {
-    if (!apps.length) {
-      fetch('/apps', { method: 'GET' })
-        .then((res) => res.json())
-        .then((data) => {
-          /*
-           * Not True --> (Keep the dates in frontend context as string, to avoid large amount converting after the first fetch request. Instead, only do converting when certain dates are requried to be rendered.)
-           */
-          data.forEach((element) => {
-            convertStrToDateObj(element);
-          });
-
-          dispatch({
-            type: 'initialize',
-            payload: data,
-          });
-        })
-        .catch(() => {
-          console.log(
-            'Error encountered when trying to fetch all applications from backend.'
-          );
+    fetch('/apps', { method: 'GET' })
+      .then((res) => res.json())
+      .then((data) => {
+        /*
+         * Not True --> (Keep the dates in frontend context as string, to avoid large amount converting after the first fetch request. Instead, only do converting when certain dates are requried to be rendered.)
+         */
+        data.forEach((element) => {
+          convertStrToDateObj(element);
         });
-    }
+
+        dispatch({
+          type: 'initialize',
+          payload: data,
+        });
+      })
+      .catch(() => {
+        console.log(
+          'Error encountered when trying to fetch all applications from backend.'
+        );
+      });
   }, []);
 
   return (
+    // Provide apps and dispatch in separated Provider components, per React offical examples. This will avoid nested object as context value and associated complexity of keeping that nested object immutable
     <AppsContext.Provider value={apps}>
       <AppsDispatchContext.Provider value={dispatch}>
         {children}
@@ -76,14 +75,15 @@ export function AppsProvider({ children }) {
   );
 }
 
+// Best practice, providing more descriptive hook name, and also keep the useContext import within this Provider component
 export function useApps() {
   return useContext(AppsContext);
 }
-
 export function useAppsDispatch() {
   return useContext(AppsDispatchContext);
 }
 
+// Similar to Redux, should be pure
 function appsReducer(apps, action) {
   switch (action.type) {
     case 'initialize': {

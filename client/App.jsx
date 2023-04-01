@@ -10,7 +10,7 @@ import { AppsProvider } from './components/appsFeature/AppsContext.jsx';
 import AddApplicationForm from './components/appsFeature/AddApplicationForm.jsx';
 import EditApplicationForm from './components/appsFeature/EditApplicationForm.jsx';
 import BarChart from './components/Chart.jsx';
-import SignInSide from './components/signinFeature/Signin.jsx';
+import Signin from './components/signinFeature/Signin.jsx';
 import {
   AuthProvider,
   RequireAuth,
@@ -22,8 +22,9 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<SignInSide />} />
+            <Route path="/" element={<Signin />} />
             <Route
+              // Adding '/*' so the children routes can be matched as a suffix
               path="/user/*"
               element={
                 <RequireAuth>

@@ -48,6 +48,7 @@ export default function SignIn() {
   // Open status of the slide-in snackbar
   const [alert, setAlert] = useState({
     isOpen: false,
+    message: '',
   });
 
   // Click handler for closing the slide-in snackbar
@@ -59,16 +60,17 @@ export default function SignIn() {
   // Click handler for the signin button on the page
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Get the data for each field in the Form.
     const data = new FormData(event.currentTarget);
     const username = data.get('username');
     const password = data.get('password');
 
+    // signin function return the response payload from backend for the fetch on '/auth/login' route: either {username:...} or {err:...}
     const res = await signin(username, password);
-
-    if (res) {
+    if (!res.err) {
       return navigate('/user');
     }
-    return setAlert({ isOpen: true });
+    return setAlert({ isOpen: true, message: res.err });
   };
 
   return (
@@ -89,6 +91,8 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+
+          {/* A Form */}
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -143,6 +147,7 @@ export default function SignIn() {
         </Box>
         {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
+      {/* Slide-in alert at bottom right of the screen */}
       <Snackbar
         open={alert.isOpen}
         autoHideDuration={5000}
@@ -150,7 +155,7 @@ export default function SignIn() {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Alert onClose={closeAlert} severity="error" sx={{ width: '100%' }}>
-          'Incorrect Username or Password'
+          {alert.message}
         </Alert>
       </Snackbar>
     </ThemeProvider>

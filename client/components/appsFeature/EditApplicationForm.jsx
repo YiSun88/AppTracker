@@ -61,7 +61,11 @@ export default function EditApplicationForm() {
   /*
    Always fetch data from backend on mounting/useEffect hook, to ensure get data from the single source of truth. In addition, this help to ensue proper rendering after refresh. (parent contextProvider will be remounted on refresh as well, fetch run in context is async so the context will not be available immediately for the useEffect hook.)
    */
+  // Not async here!
   useEffect(() => {
+    /*
+     * React’s useEffect hook expects a cleanup function returned from it which is called when the component unmounts. Therefore, the main function passed to useEffect cannot be async (will always return a promise and cause the cleanup function never called?).
+     */
     const fetchAnApp = async () => {
       try {
         const app = await (
@@ -117,6 +121,7 @@ export default function EditApplicationForm() {
   // Edit Button OnClick Handler
   const editApp = async () => {
     try {
+      // Create the history array with each milestone date, to be saved as one property in the app obj in database
       const history = createHistoryArray([
         dateSubmitted,
         onlineAssessment,
@@ -395,6 +400,7 @@ export default function EditApplicationForm() {
           </Stack>
         </Grid>
 
+        {/* Timeline */}
         <Grid item xs={12} md={3}>
           <Timeline
             timeline={createTimelineArray([

@@ -65,6 +65,10 @@ export default function AddApplicationForm() {
     setAlert({ ...alert, isOpen: false });
   };
 
+  /*
+   * TO-DO: use a form instead of separated controlled components. The 'name' for each part in the form can be a real descriptive name (e.g. 1st Interview). Refer to Signin.jsx component to see how to prevent form default submit and get eac field's value for fetch.
+   */
+
   // Sumbit Button OnClick Handler
   const submit = async () => {
     try {
@@ -108,12 +112,13 @@ export default function AddApplicationForm() {
           severity: 'success',
           message: 'Application added successfully',
         });
-        // dispatch (need to get the _id of added application)
+        // dispatch (need to get the _id of added application, so get the Backend response and dispatch that to context)
         dispatch({
           type: 'add',
           payload: data,
         });
 
+        // Redirect
         navigate('/user/applications');
       }
     } catch (err) {
@@ -296,6 +301,7 @@ export default function AddApplicationForm() {
           </Grid>
         </Grid>
 
+        {/* Timeline */}
         <Grid item xs={12} md={3}>
           <Timeline
             timeline={createTimelineArray([

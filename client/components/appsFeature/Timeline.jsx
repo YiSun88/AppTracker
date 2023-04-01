@@ -14,6 +14,7 @@ import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
 const TODAY = new Date();
 
+// Determine the color for each step of the timeline
 const calcColor = (actObj, isDot = false) => {
   if (actObj.activity === 'Offer Received') {
     return isDot ? 'success' : 'green';
@@ -28,9 +29,11 @@ const calcColor = (actObj, isDot = false) => {
 };
 
 export default function BasicTimeline({ timeline }) {
+  // Filter out the milestone date with null value
   const filteredTimeline = timeline.filter((el) => isValid(el.date));
   return (
     <Timeline position="alternate">
+      {/* .map to render each step of the filteredTimeline */}
       {filteredTimeline.map((act) => (
         <TimelineItem key={act.activity}>
           <TimelineOppositeContent
