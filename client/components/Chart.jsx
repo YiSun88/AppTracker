@@ -3,7 +3,6 @@ import { useTheme, Grid, Paper } from '@mui/material';
 import {
   XAxis,
   YAxis,
-  Cell,
   ResponsiveContainer,
   BarChart,
   Tooltip,
@@ -89,7 +88,7 @@ export default function BarChartByWeek() {
           width: '70vw',
         }}
       >
-        <Title>Applications Submitted per Week</Title>
+        <Title>Applications Submitted Each Week</Title>
         <ResponsiveContainer>
           <BarChart
             data={data}

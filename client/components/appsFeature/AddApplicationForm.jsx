@@ -179,8 +179,12 @@ export default function AddApplicationForm() {
       <Grid container spacing={2}>
         <Grid item xs={12} md={6} lg={4}>
           <FormControl fullWidth>
-            <InputLabel>Status</InputLabel>
-            <Select value={status} label="Status" onChange={onStatusChange}>
+            <InputLabel>Status (required)</InputLabel>
+            <Select
+              value={status}
+              label="Status (required)"
+              onChange={onStatusChange}
+            >
               <MenuItem value="Not Submitted">Not Submitted</MenuItem>
               <MenuItem value="Application Submitted">
                 Application Submitted

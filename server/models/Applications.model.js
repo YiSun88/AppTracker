@@ -40,6 +40,7 @@ const applicationSchema = new Schema({
   status: {
     type: String,
     trim: true,
+    required: true,
   },
   nextDue: {
     type: Date,

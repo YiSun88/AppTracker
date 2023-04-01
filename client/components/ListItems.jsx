@@ -6,7 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
-import FolderCopyIcon from '@mui/icons-material/FolderCopy';
+import TableViewIcon from '@mui/icons-material/TableView';
 
 import { Link } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ export default (
     </ListItemButton>
     <ListItemButton component={Link} to="/user/applications">
       <ListItemIcon>
-        <FolderCopyIcon />
+        <TableViewIcon />
       </ListItemIcon>
       <ListItemText primary="All Applications" />
     </ListItemButton>

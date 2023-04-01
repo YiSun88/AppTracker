@@ -1,13 +1,3 @@
-const activities = [
-  'dateSubmitted',
-  'onlineAssessment',
-  'firstInterview',
-  'secondInterview',
-  'thirdInterview',
-  'offerDate',
-  'rejectedDate',
-];
-
 const timelineActivities = [
   'Date Submitted',
   'Online Assessment',
