@@ -21,7 +21,8 @@ const userSchema = new Schema({
   },
 });
 
-userSchema.pre('save', (next) => {
+// Cannot use arrow function for the callback here as it will invalid the this keyword's reference.
+userSchema.pre('save', function (next) {
   const user = this;
   if (this.isModified('password') || this.isNew) {
     bcrypt.genSalt(
